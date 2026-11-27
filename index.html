@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c1c20">
+<meta name="robots" content="noindex, nofollow">
+<title>Missão Casamento</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c1c20'/%3E%3Cpath d='M16 25s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 24 14c0 6-8 11-8 11z' fill='%23f7c6d3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Press+Start+2P&family=VT323&display=swap">
+<style>
+/* Layout: uma coluna central, sempre escura; cartões de vidro sobre cinza grafite com um brilho suave na cor de quem está na tela.
+   Anna = blush, Doug = verde-sálvia. Títulos e números grandes com serifa, textos em letra simples. */
+:root{
+  --bg:#1c1c20; --elev:#26262b; --surface:rgba(255,255,255,.045); --glass-line:rgba(255,255,255,.08);
+  --fill:rgba(255,255,255,.07); --fg:#f3f1f2; --muted:#a3a0a6; --line:rgba(255,255,255,.09);
+  --accent:#f7c6d3; --accent-rgb:247,198,211; --ink:#1c1c20;
+  --accent-soft:rgba(var(--accent-rgb),.14); --good:var(--accent); --good-soft:var(--accent-soft);
+  --warn:#f2b880; --warn-soft:rgba(242,184,128,.14); --shadow:none; --ghost:#3b3b42;
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Playfair Display","Didot","Bodoni 72",Georgia,"Times New Roman",serif;
+  --r-lg:24px; --r-md:14px; color-scheme:dark;
+}
+body[data-person="doug"]{--accent:#b5cdb4; --accent-rgb:181,205,180; --accent-soft:rgba(181,205,180,.14); --good:#b5cdb4; --good-soft:rgba(181,205,180,.14)}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)))}
+.bar{max-width:880px;margin:0 auto;padding:14px max(16px,env(safe-area-inset-left,0px)) 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:600;font-size:17px;letter-spacing:-.01em}
+.seg{display:inline-flex;background:var(--fill);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;padding:6px 18px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+nav{max-width:880px;margin:0 auto;overflow-x:auto;scrollbar-width:none;padding:0 max(16px,env(safe-area-inset-left,0px))}
+nav::-webkit-scrollbar{display:none}
+.tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);min-width:max-content}
+.tabs button{border:0;background:none;padding:14px 0 12px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--fg);border-color:var(--fg);font-weight:500}
+
+main{max-width:880px;margin:0 auto;padding-block:36px 80px;display:grid;gap:20px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.05;letter-spacing:-.03em;font-weight:700;margin:6px 0 0;text-wrap:balance}
+h2{font-size:21px;letter-spacing:-.015em;font-weight:600;margin:0}
+.sub{color:var(--muted);margin:6px 0 0}
+.card{background:var(--surface);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow);min-width:0}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+
+.hero{display:grid;gap:4px;padding-block:8px 12px}
+.big{font-size:clamp(56px,11vw,88px);font-weight:700;letter-spacing:-.045em;line-height:1}
+.big small{font-size:.32em;font-weight:500;letter-spacing:0;color:var(--muted);margin-left:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;width:fit-content;max-width:100%;line-height:1.35}
+.chip.good{background:var(--good-soft);color:var(--good)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.neutral{background:var(--fill);color:var(--muted)}
+
+.goal-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.goal-row strong{color:var(--fg);font-weight:600}
+.track{height:10px;background:var(--fill);border-radius:999px;overflow:hidden;margin:14px 0}
+.track span{display:block;height:100%;background:var(--accent);border-radius:999px}
+.forecast{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.kv .k{font-size:13px;color:var(--muted)}
+.kv .v{font-size:22px;font-weight:600;letter-spacing:-.02em}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stat .v{font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin:6px 0 10px}
+.stat p{margin:10px 0 0;font-size:13px;color:var(--muted)}
+
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--font)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:12px}
+.pills button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 14px;font-size:13px;white-space:nowrap;color:var(--muted)}
+.pills button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+
+.btn{border:0;border-radius:999px;padding:10px 20px;font-size:14px;font-weight:500;background:var(--accent);color:#fff}
+.btn.ghost{background:var(--fill);color:var(--fg)}
+.link{border:0;background:none;color:var(--accent);font-size:14px;padding:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+
+.list{display:grid}
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .l{color:var(--muted)}
+.row .r{font-weight:500;text-align:right}
+
+.measures{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border-radius:var(--r-md);overflow:hidden}
+.measures div{background:var(--surface);padding:14px 16px}
+.measures .k{font-size:12.5px;color:var(--muted)}
+.measures .v{font-size:20px;font-weight:600;letter-spacing:-.01em}
+
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ph{aspect-ratio:3/4;max-width:100%;border-radius:var(--r-md);background:var(--fill);display:grid;place-items:center;position:relative;overflow:hidden}
+.ph svg{width:44%;height:auto;color:var(--line)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph figcaption{position:absolute;left:12px;bottom:10px;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);padding:3px 9px;border-radius:999px}
+figure{margin:0}
+.ba-label{font-size:13px;color:var(--muted);margin:10px 0 0;text-align:center}
+
+.entry{display:grid;grid-template-columns:auto 1fr auto;gap:4px 16px;padding:16px 0;border-top:1px solid var(--line);align-items:center}
+.entry:first-child{border-top:0}
+.entry .date{font-weight:600;min-width:92px}
+.entry .meta{color:var(--muted);font-size:13.5px;min-width:0}
+.entry .w{font-weight:600;font-size:17px;text-align:right}
+.entry .d{font-size:12.5px;text-align:right}
+.entry .obs{grid-column:2/4;font-size:13.5px;color:var(--muted);margin:0}
+.tag{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:6px;margin-left:8px}
+.tag.m{background:var(--accent-soft);color:var(--accent)}
+.tag.s{background:var(--fill);color:var(--muted)}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:12px 8px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-top:0}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+td:last-child,th:last-child{padding-right:0}
+td.good{color:var(--good);font-weight:600}
+
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.meal{background:var(--fill);border-radius:var(--r-md);padding:16px}
+.meal b{display:block;font-size:13px;margin-bottom:4px}
+.meal span{font-size:13.5px;color:var(--muted)}
+
+/* silhueta */
+.body-card{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center}
+.fig{display:block;width:100%;max-width:280px;height:auto;margin:0 auto}
+.fig path{transition:d .8s cubic-bezier(.2,.7,.2,1)}
+.tl{display:flex;align-items:center;gap:12px;margin-top:16px}
+.tl input{flex:1;min-width:0;accent-color:var(--accent)}
+.play{width:38px;height:38px;border-radius:50%;border:0;background:var(--fill);display:grid;place-items:center;flex:none;color:var(--fg)}
+.tl-date{font-size:13px;color:var(--muted);min-width:104px;text-align:right}
+.mrow{display:grid;grid-template-columns:1fr auto 64px;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.mrow:first-child{border-top:0}
+.mrow span{color:var(--muted)}
+.mrow b{font-weight:600}
+.mrow em{font-style:normal;text-align:right;color:var(--good);font-weight:500}
+.mrow em.zero{color:var(--muted)}
+.toggle{margin-top:14px;border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+.toggle i{width:10px;height:10px;border-radius:3px;background:var(--ghost)}
+.toggle[aria-pressed="true"]{color:var(--fg);border-color:var(--fg)}
+@media (max-width:640px){.body-card{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.fig path{transition:none}}
+
+/* relatório */
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.rep-ov{position:fixed;inset:0;z-index:25;background:var(--bg);overflow:auto;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+.rep-bar{position:sticky;top:0;z-index:2;max-width:794px;margin:0 auto;padding:14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.rep-opts{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.rep-opts label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.rep-opts input{accent-color:var(--accent);width:16px;height:16px}
+.paper{--bg:#ffffff;--surface:#ffffff;--fill:#f0f0f3;--fg:#1d1d1f;--muted:#6e6e73;--line:#e3e3e8;--accent:#0071e3;--good:#248a3d;--warn:#b25000;--ghost:#c9c9d0;
+  color-scheme:light;background:var(--surface);color:var(--fg);max-width:794px;margin:8px auto 60px;border-radius:14px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08),0 20px 50px rgba(0,0,0,.10);padding:48px 52px;display:grid;gap:28px;font-size:13.5px}
+.paper h1{font-size:30px;margin:4px 0 0}
+.paper h2{font-size:15px;padding-top:18px;border-top:1px solid var(--line);margin-bottom:12px}
+.p-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.p-head .meta{color:var(--muted);font-size:12.5px;text-align:right;line-height:1.6}
+.p-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.p-grid div{background:var(--surface);padding:12px 14px}
+.p-grid .k{font-size:11.5px;color:var(--muted)}
+.p-grid .v{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.p-figs{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:360px;margin:0 auto;text-align:center;font-size:12.5px;color:var(--muted)}
+.p-figs .fig{max-width:150px}
+.paper table{font-size:12.5px}
+.paper th,.paper td{padding:8px 6px}
+.p-obs{display:grid;gap:8px}
+.p-obs div{display:grid;grid-template-columns:110px 1fr;gap:12px}
+.p-obs b{font-weight:600}
+.p-foot{font-size:11.5px;color:var(--muted);text-align:center;padding-top:14px;border-top:1px solid var(--line)}
+@media (max-width:640px){.paper{padding:24px 20px}.p-grid{grid-template-columns:repeat(2,1fr)}.p-obs div{grid-template-columns:1fr;gap:0}}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff!important;padding:0!important}
+  body::before,body>*:not(#repRoot){display:none!important}
+  .rep-ov{position:static;overflow:visible;padding:0;background:#fff}
+  .rep-bar{display:none}
+  .paper{box-shadow:none;margin:0;max-width:none;padding:0;border-radius:0}
+  .paper section{break-inside:avoid}
+}
+
+/* ===== tema: grafite + blush/sálvia, vidro, serifa ===== */
+body{transition:background-color .5s}
+.glow{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60% 45% at 85% -5%,rgba(var(--accent-rgb),.16),transparent 70%),
+             radial-gradient(50% 40% at -10% 35%,rgba(var(--accent-rgb),.07),transparent 70%);transition:background .6s}
+.brand{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:0}
+.brand em{font-style:italic;color:var(--accent);transition:color .5s}
+.seg{background:var(--fill)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--ink);box-shadow:0 0 18px rgba(var(--accent-rgb),.35);transition:background .5s,box-shadow .5s}
+.tabs button[aria-selected="true"]{color:var(--fg);border-color:var(--accent)}
+h1,h2,.big,.stat .v,.kv .v,.measures .v,.goal-big,.paper h1{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+h1{letter-spacing:-.015em}
+.big{letter-spacing:-.02em}
+.card{background:var(--surface);border:1px solid var(--glass-line);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%)}
+.btn{background:var(--accent);color:var(--ink);font-weight:600;transition:background .5s,transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--fill);color:var(--fg);font-weight:500}
+.link{color:var(--accent)}
+.track{background:var(--fill)}
+.track span{background:linear-gradient(90deg,rgba(var(--accent-rgb),.55),var(--accent));box-shadow:0 0 16px rgba(var(--accent-rgb),.45)}
+.pills button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.measures{background:var(--line)}
+.measures div{background:var(--elev)}
+.meal{background:var(--fill)}
+.ph{background:var(--fill)}
+.ph figcaption{background:var(--elev)}
+body .sheet{background:var(--elev);border:1px solid var(--glass-line)}
+body .field input,body .field textarea,body .lock-box input{background:rgba(0,0,0,.25);border-color:var(--line)}
+body .lock-box .ic{background:var(--accent);color:var(--ink);box-shadow:0 0 30px rgba(var(--accent-rgb),.4)}
+body .lock-box h1{font-size:34px}
+body .toast{background:var(--accent);color:var(--ink)}
+.chip.good{background:var(--accent-soft);color:var(--accent)}
+.rep-bar{background:color-mix(in srgb,var(--bg) 85%,transparent)}
+header{background:color-mix(in srgb,var(--bg) 78%,transparent)}
+.fig{filter:drop-shadow(0 0 14px rgba(var(--accent-rgb),.38)) drop-shadow(0 0 2px rgba(var(--accent-rgb),.5))}
+.toggle[aria-pressed="true"]{border-color:var(--accent);color:var(--fg)}
+
+/* meta em destaque */
+.goal-hero{padding:30px}
+.goal-hero .eyebrow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.goal-big{font-size:clamp(46px,9vw,76px);line-height:1;margin:14px 0 4px}
+.goal-big small{font-family:var(--font);font-size:.28em;color:var(--muted);margin-left:6px;letter-spacing:0}
+.goal-big .acc{color:var(--accent);transition:color .5s}
+.goal-hero .track{height:12px;margin:20px 0 10px}
+.duo{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;margin-top:18px;align-items:end}
+.duo>div{min-width:0}
+.duo .k{font-size:13px;color:var(--muted)}
+.duo .goal-big{margin:6px 0 0}
+.duo>div:first-child .goal-big{font-size:clamp(64px,13vw,112px);color:var(--fg)}
+.duo>div:last-child{padding-left:20px;border-left:1px solid var(--line)}
+@media (max-width:520px){.duo{grid-template-columns:1fr}.duo>div:last-child{padding-left:0;border-left:0;padding-top:14px;border-top:1px solid var(--line)}}
+.goal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.goal-stats .k{font-size:12.5px;color:var(--muted)}
+.goal-stats .v{font-family:var(--serif);font-size:24px;font-weight:500}
+@media (max-width:640px){.goal-stats{grid-template-columns:repeat(2,1fr)}.goal-hero{padding:22px}}
+
+/* relatório continua em papel branco, com a cor de cada um mais escura para imprimir bem */
+.paper{--accent:#c26a87;--accent-rgb:194,106,135;--good:#c26a87;--ink:#ffffff;--glass-line:transparent;--elev:#ffffff;--accent-soft:rgba(194,106,135,.12)}
+body[data-person="doug"] .paper{--accent:#5f8f5e;--accent-rgb:95,143,94;--good:#5f8f5e}
+.paper .fig{filter:none}
+.paper .meal{background:#f3f1f2}
+
+.entry-card{padding:6px 22px}
+main:has(.entry-card){gap:12px}
+.entry-actions{grid-column:1/-1;display:flex;gap:18px;align-items:center;margin-top:4px;font-size:13.5px}
+.entry-actions .link{font-size:13.5px}
+body .link.danger{color:#ff8a8a}
+.btn.danger{background:#ff8a8a;color:#2a1214}
+.sheet-actions{display:flex;gap:10px;margin-top:8px}
+.sheet-actions .btn{flex:1}
+/* ===== aba Jogo: RPG 8-bit ===== */
+.pix{font-family:"Press Start 2P","Courier New",monospace;letter-spacing:0}
+.vt{font-family:"VT323","Courier New",monospace;font-size:21px;line-height:1.15}
+.game-card{background:#121218;border:3px solid #000;box-shadow:inset 0 0 0 2px #2e2e3c,0 0 0 1px var(--glass-line);border-radius:6px;padding:18px;min-width:0}
+.game-card h2.pix{font-size:11px;color:var(--accent);margin:0 0 14px;line-height:1.6}
+.hud{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.hud .lvl{font-size:13px;color:var(--accent);line-height:1.6}
+.xp{width:min(260px,60vw);height:14px;background:#24242e;border:2px solid #000;box-shadow:inset 0 0 0 2px #3c3c4e;margin:8px 0 4px;padding:2px}
+.xp span{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,rgba(var(--accent-rgb),.75) 6px 8px)}
+.hud .muted,.game-card .muted{color:#8f8c99}
+.hud-r{text-align:right}
+.hud-r b{color:var(--accent);font-weight:400}
+.world{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges;background:#0e0f1a;border:2px solid #000}
+.quest-line{margin:12px 0 0;color:#d9d6e0}
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.qlist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.qlist li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center}
+.box{width:18px;height:18px;border:2px solid #000;background:#24242e;box-shadow:inset 0 0 0 2px #3c3c4e;display:grid;place-items:center;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--ink)}
+.qlist li.ok .box{background:var(--accent);box-shadow:none}
+.qlist li.ok .t{color:#8f8c99;text-decoration:line-through}
+.qlist .x{color:var(--accent)}
+.blist li .box{font-size:8px}
+.tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tcard{perspective:700px;aspect-ratio:3/4;max-width:100%}
+.tcard .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s}
+.tcard .f,.tcard .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid #000;border-radius:6px;display:grid;padding:10px;text-align:center}
+.tcard .f{background:linear-gradient(160deg,rgba(var(--accent-rgb),.28),#1b1b24 60%);box-shadow:inset 0 0 0 2px rgba(var(--accent-rgb),.6);grid-template-rows:auto 1fr auto auto;gap:4px}
+.tcard .f .g{font-size:34px;color:var(--accent);align-self:center;font-family:"VT323",monospace;line-height:1}
+.tcard .f .n{font-family:"Press Start 2P",monospace;font-size:9px;line-height:1.5;color:#f3f1f2}
+.tcard .f .d{font-family:"VT323",monospace;font-size:17px;line-height:1.05;color:#bdb9c6}
+.tcard .f .o{font-family:"Press Start 2P",monospace;font-size:7px;color:#8f8c99}
+button.tcard{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;width:100%;cursor:pointer;display:block}
+button.tcard:disabled{cursor:default}
+button.tcard.on:hover .f.art,button.tcard.on:focus-visible .f.art{box-shadow:inset 0 0 0 2px rgba(var(--accent-rgb),.9),0 0 18px rgba(var(--accent-rgb),.45)}
+.tcard .f.art{padding:0;overflow:hidden;background-size:cover;background-position:center;display:block;box-shadow:inset 0 0 0 2px rgba(var(--accent-rgb),.6);transition:box-shadow .2s}
+.tcard .f.art .num{position:absolute;top:6px;left:6px;font-size:7px;color:#fff;background:rgba(0,0,0,.55);padding:4px 5px;border-radius:3px}
+.tcard .f.art .cap{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 8px;background:linear-gradient(to top,rgba(10,10,14,.92) 35%,rgba(10,10,14,0));text-align:left}
+.tcard .f.art .cap .n{font-size:8px}
+.tcard .f.art .cap .d{font-size:15px;color:#d6d2de;margin-top:3px}
+.preview-note{margin:6px 0 0}
+.card-view{position:fixed;inset:0;z-index:80;background:rgba(8,8,12,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;opacity:0;transition:opacity .2s}
+.card-view.show{opacity:1}
+.card-view figure{position:relative;margin:0;width:min(420px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;background:#15151c;border:3px solid #000;box-shadow:0 0 0 2px rgba(var(--accent-rgb),.7),0 20px 60px rgba(0,0,0,.6);border-radius:8px;overflow:hidden}
+.card-view img{display:block;width:100%;min-height:0;object-fit:contain;flex:1 1 auto}
+.card-view figcaption{padding:12px 16px 14px}
+.card-view figcaption .pix{font-family:"Press Start 2P",monospace;font-size:8px;color:var(--accent)}
+.card-view figcaption h3{font-family:"Press Start 2P",monospace;font-size:12px;line-height:1.5;margin:8px 0 4px;color:#f3f1f2}
+.card-view figcaption p{margin:0;font-size:19px;color:#bdb9c6}
+.cv-x{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.tcard .b{transform:rotateY(180deg);background:repeating-linear-gradient(45deg,#1d1d27 0 6px,#23232f 6px 12px);box-shadow:inset 0 0 0 2px #3c3c4e;place-items:center}
+.tcard .b span{font-family:"Press Start 2P",monospace;font-size:22px;color:#4a4a5e}
+.tcard.off .in{transform:rotateY(180deg)}
+@media (prefers-reduced-motion:no-preference){.tcard.on .in{animation:flip .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:var(--dl,0s)}
+  @keyframes flip{from{transform:rotateY(180deg)}to{transform:rotateY(0)}}}
+@media (max-width:640px){.game-grid{grid-template-columns:1fr}.tcards{grid-template-columns:repeat(2,1fr)}.vt{font-size:19px}}
+
+/* rolagem: caixas encolhem e somem ao subir */
+.shrink{transform-origin:50% 100%;will-change:transform,opacity}
+.fun{margin:6px 0 0;color:var(--muted);font-size:15px}
+.prazo{display:inline-flex;gap:6px;align-items:baseline;font-size:13px;color:var(--muted);margin-top:8px}
+.prazo b{color:var(--accent);font-family:var(--serif);font-size:18px;font-weight:500}
+
+.thumbs{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.thumbs img{width:68px;height:90px;object-fit:cover;border-radius:10px;border:1px solid var(--glass-line)}
+
+/* folha (formulário) */
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.35);display:grid;place-items:end center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--surface);width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;
+  padding:22px 24px calc(24px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){.overlay{place-items:center}.sheet{border-radius:24px}}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;color:var(--muted)}
+.field input,.field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:11px 14px;width:100%}
+.field textarea{min-height:84px;resize:vertical}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 12px}
+.sheet h3{font-size:15px;margin:18px 0 10px}
+
+.lock{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;place-items:center;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+.lock-box{width:100%;max-width:340px;text-align:center;display:grid;gap:14px}
+.lock-box .ic{width:56px;height:56px;margin:0 auto;border-radius:16px;background:var(--fg);color:var(--bg);display:grid;place-items:center}
+.lock-box h1{font-size:30px}
+.lock-box input{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:13px 16px;text-align:center;width:100%}
+.lock-box .hint{font-size:12.5px;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;
+  background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:500}
+
+@media (max-width:640px){
+  .stats{grid-template-columns:1fr}
+  .measures,.grid3{grid-template-columns:repeat(2,1fr)}
+  .menu{grid-template-columns:1fr}
+  .card{padding:20px}
+  .entry{grid-template-columns:1fr auto}
+  .entry .meta{grid-column:1/2}
+  .entry .obs{grid-column:1/3}
+}
+@media (prefers-reduced-motion:no-preference){
+  main>*{animation:rise .45s ease backwards}
+  @keyframes rise{from{transform:translateY(8px)}to{transform:none}}
+  .track span{transition:width .6s ease}
+}
+.empty{text-align:center;padding:44px 28px}
+.empty .ic{width:64px;height:64px;margin:0 auto 18px;border-radius:18px;background:rgba(var(--accent-rgb),.16);color:var(--accent);display:grid;place-items:center;font-size:30px}
+.empty h2{margin:0 0 10px}
+.empty .sub{max-width:440px;margin:0 auto 22px}
+</style>
+</head>
+<body data-person="anna">
+
+<div class="glow" aria-hidden="true"></div>
+<header>
+  <div class="bar">
+    <div class="brand">Missão <em>Casamento</em></div>
+    <div class="seg" role="group" aria-label="Pessoa">
+      <button id="p-anna" data-p="anna" aria-pressed="true">Anna</button>
+      <button id="p-doug" data-p="doug" aria-pressed="false">Doug</button>
+    </div>
+  </div>
+  <nav><div class="tabs" role="tablist">
+    <button id="t-painel" role="tab" data-t="painel" aria-selected="true">Painel</button>
+    <button id="t-ficha" role="tab" data-t="ficha" aria-selected="false">Ficha técnica</button>
+    <button id="t-hist" role="tab" data-t="hist" aria-selected="false">Atualizações</button>
+    <button id="t-ba" role="tab" data-t="ba" aria-selected="false">Antes x agora</button>
+    <button id="t-jogo" role="tab" data-t="jogo" aria-selected="false">Jogo</button>
+  </div></nav>
+</header>
+<main id="main"></main>
+<div id="sheetRoot"></div>
+<div id="repRoot"></div>
+
+<script>
+const MED=[["pescoco","Pescoço"],["ombro","Ombro"],["busto","Busto"],["braco","Braço"],["antebraco","Antebraço"],["cintura","Cintura"],["abdomen","Abdômen"],["quadril","Glúteos"],["coxa","Coxa"],["panturrilha","Panturrilha"]];
+/* ---------- dados: começam vazios e ficam guardados neste aparelho ---------- */
+const CHAVE="missao-casamento-v1";
+function pessoa(nome,sexo,altura,meta){
+  // a evolução conta a partir da ficha técnica: registros anteriores a ela ficam de fora
+  return {nome,sexo,altura,meta,todos:[],cardapio:[],cardapioEditado:null,
+    get ficha(){return this.todos.find(r=>r.ficha)||null},
+    get registros(){const f=this.ficha;return f?[f,...this.todos.filter(r=>r!==f&&r.data>f.data)]:[]}};
+}
+const people={anna:pessoa("Anna","F",1.65,60),doug:pessoa("Doug","M",1.75,null)};
+function carregar(){
+  try{
+    const s=JSON.parse(localStorage.getItem(CHAVE)||"null"); if(!s)return;
+    ["anna","doug"].forEach(id=>{const d=s[id];if(!d)return;const P=people[id];
+      ["altura","meta","todos","cardapio","cardapioEditado"].forEach(k=>{if(d[k]!==undefined)P[k]=d[k]})});
+  }catch(e){}
+}
+function salvar(){
+  const s={};
+  ["anna","doug"].forEach(id=>{const P=people[id];s[id]={altura:P.altura,meta:P.meta,todos:P.todos,cardapio:P.cardapio,cardapioEditado:P.cardapioEditado}});
+  try{localStorage.setItem(CHAVE,JSON.stringify(s));return true}
+  catch(e){toast(e&&e.name==="QuotaExceededError"?"Não coube no aparelho. Tente com menos fotos.":"Este navegador não deixou guardar os dados.");return false}
+}
+carregar();
+/* fotos ficam menores antes de guardar, para caber no aparelho */
+function reduzirFoto(file,max=900){
+  return new Promise(res=>{const r=new FileReader();
+    r.onerror=()=>res(null);
+    r.onload=()=>{const img=new Image();img.onerror=()=>res(null);
+      img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height)),cv=document.createElement("canvas");
+        cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+        res(cv.toDataURL("image/jpeg",.72))};
+      img.src=r.result};
+    r.readAsDataURL(file)});
+}
+const menos=(v,u="")=>Math.abs(v)<.05?"0"+u:(v>0?"−":"+")+n1(Math.abs(v))+u;
+const state={p:"anna",t:"painel",med:"cintura",fig:null,ghost:true};
+
+const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const MESL=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const dt=s=>new Date(s+"T12:00:00");
+const fDate=s=>{const d=dt(s);return d.getDate()+" "+MES[d.getMonth()]+" "+d.getFullYear()};
+const fMonth=d=>MESL[d.getMonth()]+" de "+d.getFullYear();
+const n1=v=>v.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+const n2=v=>v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function calc(P){
+  const r=P.registros, ini=r[0], last=r[r.length-1];
+  const mens=r.filter(x=>x.tipo==="mensal"), lastM=mens[mens.length-1];
+  const imc=last.peso/(P.altura*P.altura);
+  const rcq=lastM.medidas.cintura/lastM.medidas.quadril;
+  const xs=r.map(x=>dt(x.data)/864e5), ys=r.map(x=>x.peso);
+  const mx=xs.reduce((a,b)=>a+b)/xs.length, my=ys.reduce((a,b)=>a+b)/ys.length;
+  let num=0,den=0; xs.forEach((x,i)=>{num+=(x-mx)*(ys[i]-my);den+=(x-mx)**2});
+  const slope=den?num/den:0;
+  let prev=null;
+  if(P.meta&&slope<0&&last.peso>P.meta){prev=new Date(dt(last.data).getTime()+((last.peso-P.meta)/-slope)*864e5)}
+  const cm=MED.reduce((s,[k])=>s+(ini.medidas[k]-lastM.medidas[k]),0);
+  return {ini,last,lastM,imc,rcq,slopeMes:slope*30.4,prev,cm};
+}
+function imcLabel(v){return v<18.5?["Abaixo do peso","warn"]:v<25?["Peso adequado","good"]:v<30?["Sobrepeso","warn"]:["Obesidade","warn"]}
+function rcqLabel(v,s){const lim=s==="F"?0.85:0.90;return v<lim?["Dentro do recomendado","good"]:["Pede atenção","warn"]}
+
+/* ---------- gráfico ---------- */
+function niceStep(r){const p=Math.pow(10,Math.floor(Math.log10(r)));const f=r/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+function chart(pts,{goal=null,unit="kg",id="c"}={}){
+  const W=640,H=240,L=40,R=16,T=14,B=28;
+  const xs=pts.map(p=>dt(p.data).getTime());
+  let lo=Math.min(...pts.map(p=>p.v),goal??Infinity), hi=Math.max(...pts.map(p=>p.v),goal??-Infinity);
+  const step=niceStep(Math.max(hi-lo,1)/4); lo=Math.floor(lo/step)*step; hi=Math.ceil(hi/step)*step; if(hi===lo)hi+=step;
+  const x0=Math.min(...xs),x1=Math.max(...xs);
+  const X=t=>L+(t-x0)/(x1-x0||1)*(W-L-R), Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+  let g="";
+  for(let v=lo;v<=hi+1e-9;v+=step){g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"${v===lo?"":' stroke-dasharray="2 4"'}/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end">${Number.isInteger(step)?v:n1(v)}</text>`}
+  const seen=new Set();
+  pts.forEach((p,i)=>{const d=dt(p.data);const key=d.getMonth()+"-"+d.getFullYear();if(p.tipo!=="semanal"&&!seen.has(key)){seen.add(key);g+=`<text x="${X(xs[i])}" y="${H-8}" text-anchor="middle">${MES[d.getMonth()]}</text>`}});
+  if(goal!=null){g+=`<line x1="${L}" x2="${W-R}" y1="${Y(goal)}" y2="${Y(goal)}" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="6 5"/><text x="${W-R}" y="${Y(goal)-7}" text-anchor="end" style="fill:var(--good);font-weight:600">meta ${n1(goal)} ${unit}</text>`}
+  const line=pts.map((p,i)=>(i?"L":"M")+X(xs[i]).toFixed(1)+" "+Y(p.v).toFixed(1)).join(" ");
+  const area=line+` L${X(xs[xs.length-1]).toFixed(1)} ${H-B} L${L} ${H-B} Z`;
+  const dots=pts.map((p,i)=>p.tipo==="semanal"
+    ?`<circle cx="${X(xs[i])}" cy="${Y(p.v)}" r="3.5" fill="var(--elev)" stroke="var(--accent)" stroke-width="1.5"/>`
+    :`<circle cx="${X(xs[i])}" cy="${Y(p.v)}" r="4.5" fill="var(--accent)" stroke="var(--elev)" stroke-width="2"/>`).join("");
+  const lp=pts[pts.length-1], lx=X(xs[xs.length-1]), ly=Y(lp.v);
+  const lab=`<text x="${lx-10}" y="${ly-12}" text-anchor="end" style="fill:var(--fg);font-weight:600;font-size:12px">${n1(lp.v)} ${unit}</text>`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de evolução">
+    <defs><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:var(--accent);stop-opacity:.18"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></linearGradient></defs>
+    ${g}<path d="${area}" fill="url(#${id}g)"/><path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${dots}${lab}</svg>`;
+}
+const silhouette=`<svg viewBox="0 0 60 100" aria-hidden="true"><circle cx="30" cy="18" r="11" fill="currentColor"/><path d="M10 100 V52 a20 20 0 0 1 40 0 V100Z" fill="currentColor"/></svg>`;
+const ultimaFoto=P=>[...P.registros].reverse().find(r=>r!==P.ficha&&r.fotosSrc&&r.fotosSrc.length);
+function photo(cap,src){return `<figure class="ph">${src?`<img src="${src}" alt="${esc(cap)}">`:silhouette}<figcaption>${esc(cap)}</figcaption></figure>`}
+
+/* ---------- silhueta (desenhada a partir das medidas, em centímetros) ---------- */
+function smooth(p){
+  const n=p.length;let d=`M${p[0][0].toFixed(2)} ${p[0][1].toFixed(2)}`;
+  for(let i=0;i<n;i++){
+    const p0=p[(i-1+n)%n],p1=p[i],p2=p[(i+1)%n],p3=p[(i+2)%n];
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6], c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=` C${c1[0].toFixed(2)} ${c1[1].toFixed(2)} ${c2[0].toFixed(2)} ${c2[1].toFixed(2)} ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
+  }
+  return d+"Z";
+}
+const mirror=pts=>pts.map(([x,y])=>[-x,y]);
+function taper(c){
+  const right=c.map(([x,y,w])=>[x+w/2,y]), left=c.map(([x,y,w])=>[x-w/2,y]).reverse();
+  const a=c[0], z=c[c.length-1];
+  return [[a[0],a[1]-a[2]*.4],...right,[z[0],z[1]+z[2]*.35],...left];
+}
+function bodyGeom(P,m){
+  const H=P.altura*100, F=P.sexo==="F", y=f=>f*H;
+  const tw=c=>c/2.8, lw=c=>c/Math.PI;           // largura de frente a partir da circunferência
+  const neck=lw(m.pescoco)/2*.8, arm=lw(m.braco)*.9, sh=tw(m.ombro)/2;
+  const bust=tw(m.busto)/2, waist=tw(m.cintura)/2, abd=tw(m.abdomen)/2, hip=tw(m.quadril)/2;
+  const thigh=lw(m.coxa), calf=lw(m.panturrilha);
+  const chest=Math.min(bust*.95, sh-arm*.5);
+  const R=[[neck,y(.125)],[neck*1.08,y(.155)],[sh*.72,y(.172)],[sh-arm*.35,y(.19)],[chest,y(.245)],
+    [Math.min(bust,chest*1.06),y(.29)],[waist,y(F?.375:.395)],[abd,y(.445)],[hip,y(.505)],[hip*.97,y(.545)],[0,y(.565)]];
+  const torso=[...R,...mirror(R.slice(0,-1).reverse())];
+  const ax=sh-arm*.5, ex=Math.max(waist+arm*.36+1.2,ax+.5), wx=Math.max(hip+3.2,ex+1);
+  const armC=[[ax,y(.19),arm*1.08],[ax+.3,y(.255),arm],[ex,y(.385),m.antebraco?lw(m.antebraco)*.9:arm*.74],[wx,y(.485),5.2],[wx+.4,y(.525),7.6],[wx+.5,y(.56),5]];
+  const lc=Math.max(thigh/2*.98,hip-thigh/2);
+  const legC=[[lc,y(.535),thigh*.98],[lc,y(.59),thigh*.96],[lc*.82,y(.735),calf*.86],[lc*.82,y(.815),calf],[lc*.78,y(.955),6],[lc*.78+1.6,y(.99),8.2],[lc*.78+2.2,y(1),6]];
+  const armR=taper(armC), legR=taper(legC);
+  return {H,head:{cy:y(.065),rx:y(.042),ry:y(.062)},
+    d:{torso:smooth(torso),armR:smooth(armR),armL:smooth(mirror(armR)),legR:smooth(legR),legL:smooth(mirror(legR))}};
+}
+const PARTS=["torso","armR","armL","legR","legL"];
+let timer=null;
+function mlist(P,i){
+  const mens=P.registros.filter(r=>r.tipo==="mensal"), a=mens[0], b=mens[i];
+  const row=(l,v,d,u)=>`<div class="mrow"><span>${l}</span><b>${n1(v)} ${u}</b><em class="${d>0?"":"zero"}">${d>0?"−"+n1(d):"—"}</em></div>`;
+  return row("Peso",b.peso,a.peso-b.peso,"kg")+MED.map(([k,l])=>row(l,b.medidas[k],a.medidas[k]-b.medidas[k],"cm")).join("");
+}
+function figCard(P){
+  const mens=P.registros.filter(r=>r.tipo==="mensal"), i=state.fig??mens.length-1;
+  const g0=bodyGeom(P,mens[0].medidas), g=bodyGeom(P,mens[i].medidas), h=g.head;
+  const head=`<ellipse cx="0" cy="${h.cy}" rx="${h.rx}" ry="${h.ry}"/>`+(P.sexo==="F"?`<circle cx="0" cy="${h.cy-h.ry-1.4}" r="3.6"/>`:"");
+  return `<section class="card">
+    <div class="card-head"><h2>Silhueta de ${P.nome}</h2><span class="sub" style="margin:0">Desenhada com as medidas de cada mês</span></div>
+    <div class="body-card">
+      <div>
+        <svg class="fig" viewBox="-40 0 80 186" role="img" aria-label="Silhueta de ${P.nome} desenhada a partir das medidas">
+          <defs><linearGradient id="figg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:.72"/></linearGradient></defs>
+          <ellipse cx="0" cy="182.6" rx="17" ry="1.6" fill="var(--ghost)"/>
+          <g transform="translate(0 ${180-g.H})">
+            <g id="ghost" fill="var(--ghost)"${state.ghost?"":" hidden"}>${PARTS.map(k=>`<path d="${g0.d[k]}"/>`).join("")}${head}</g>
+            <g fill="url(#figg)">${PARTS.map(k=>`<path id="fg-${k}" d="${g.d[k]}"/>`).join("")}${head}</g>
+          </g>
+        </svg>
+        <div class="tl">
+          <button class="play" id="playBtn" data-fig="play" aria-label="Ver a evolução mês a mês"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5v11l9.5-5.5z"/></svg></button>
+          <input type="range" id="figRange" min="0" max="${mens.length-1}" value="${i}" aria-label="Escolher mês">
+          <div class="tl-date num" id="figDate">${fMonth(dt(mens[i].data))}</div>
+        </div>
+      </div>
+      <div>
+        <div class="mlist num" id="mlist">${mlist(P,i)}</div>
+        <button class="toggle" id="ghostBtn" data-fig="ghost" aria-pressed="${state.ghost}"><i></i>Mostrar o corpo do início</button>
+      </div>
+    </div>
+  </section>`;
+}
+function updateFigure(){
+  const P=people[state.p], mens=P.registros.filter(r=>r.tipo==="mensal"), i=state.fig??mens.length-1;
+  const g=bodyGeom(P,mens[i].medidas);
+  PARTS.forEach(k=>{const e=document.getElementById("fg-"+k);e&&e.setAttribute("d",g.d[k])});
+  const r=document.getElementById("figRange"); if(r)r.value=i;
+  const dEl=document.getElementById("figDate"); if(dEl)dEl.textContent=fMonth(dt(mens[i].data));
+  const ml=document.getElementById("mlist"); if(ml)ml.innerHTML=mlist(P,i);
+}
+const ICON_PLAY='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5v11l9.5-5.5z"/></svg>';
+const ICON_PAUSE='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2.5" y="1.5" width="3" height="11" rx="1"/><rect x="8.5" y="1.5" width="3" height="11" rx="1"/></svg>';
+function stopPlay(){clearInterval(timer);timer=null;const b=document.getElementById("playBtn");if(b)b.innerHTML=ICON_PLAY}
+function playFig(){
+  if(timer){stopPlay();return}
+  const n=people[state.p].registros.filter(r=>r.tipo==="mensal").length;
+  if((state.fig??n-1)>=n-1)state.fig=0; updateFigure();
+  document.getElementById("playBtn").innerHTML=ICON_PAUSE;
+  timer=setInterval(()=>{if(state.fig>=n-1){stopPlay();return}state.fig++;updateFigure()},1100);
+}
+
+/* frases bem-humoradas (uma por visita) */
+const FRASES={
+  anna:["A Plotka mandou dizer que está orgulhosa. E que quer petisco.","Mais um mês, mais uma fase vencida. Bora!","Spoiler: o próximo chefe já está com medo.","O Doug que se cuide: você está na frente no tabuleiro.","Fita métrica tremendo só de te ver chegando."],
+  doug:["A Plotka está de olho. Sem beliscar a geladeira à noite!","Rolou um dado de sorte: hoje é dia de treino.","A Anna está na frente. Hora de reagir!","Cada quilo é uma casa no mapa. Anda, peão!","Modo foco ativado. Snacks em quarentena."]
+};
+const fraseIdx={anna:Math.floor(Math.random()*99),doug:Math.floor(Math.random()*99)};
+
+/* ---------- aba Jogo: RPG 8-bit isométrico ---------- */
+const HOJE=(()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")})(), PRAZO="2027-08-14";
+const diasPrazo=()=>Math.round((dt(PRAZO)-dt(HOJE))/864e5);
+const SPR={
+  anna:{rows:["..hhhhh..",".hhhhhhh.",".hsssssh.",".hsksksh.",".hsssssh.","hh.sss.hh","h.ppppp.h",".sppppps.",".sppppps.","..ppppp..","..dd.dd..","..dd.dd..","..kk.kk.."],
+        pal:{h:"#5a3528",s:"#f1c7a5",k:"#2a1d1d",p:"#f7a8c0",d:"#3b3b55"}},
+  doug:{rows:["..hhhhh..",".hhhhhhh.",".hsssssh.","..sksks..","..sssss..","...sss...",".ggggggg.","sgggggggs","sgggggggs","..ggggg..","..dd.dd..","..dd.dd..","..kk.kk.."],
+        pal:{h:"#2f241d",s:"#e8b994",k:"#1e1a1a",g:"#9fc29d",d:"#3a3f4f"}},
+  // Plotka: toda branquinha, pontinhas das orelhas e focinho bege, uma orelha em pé e outra caída
+  plotka:{rows:["........e...","........ww..",".......wwwww","t......ewkwx",".t....wwwwnn","..wwwwwwww..","..wwwwwwww..","..w.w..w.w..","..g.g..g.g.."],
+          pal:{w:"#f6f6f6",e:"#d9b98f",k:"#202020",n:"#d9b98f",x:"#5a4636",t:"#ececec",g:"#d6d6d6"}},
+  slime:{rows:["...mmmm...","..mmmmmm..",".mmmmmmmm.",".mwkmmwkm.","mmmmmmmmmm","mmmmmmmmmm",".mmmmmmmm."]},
+  dragao:{rows:["........rr..",".......rrwr.","..r....rrrrd",".rrr..rrrr..","rrrrrrrrr...",".ryyyyrrr...","..yyyyrr....","..rr..rr...."],pal:{r:"#e2554f",w:"#fff",d:"#7a1f1c",y:"#f2c14e"}},
+  bau:{rows:[".bbbbbbb.","bdddddddb","byyyyyyyb","bbbbybbbb","bbbbybbbb","bdddddddb",".bbbbbbb."],pal:{b:"#8a5a2b",d:"#4a2e14",y:"#f2c14e"}},
+  bauAberto:{rows:[".y..y..y.","bdddddddb","bdddddddb","...y.y...","byyyyyyyb","bbbbybbbb","bdddddddb",".bbbbbbb."],pal:{b:"#8a5a2b",d:"#2a1a0c",y:"#f2c14e"}},
+  arvore:{rows:["...t...","..ttt..",".tmmmt.","..tmt..",".tmmmt.","tmmmmmt","..tmt..",".tmmmt.","tmmmmmt","...b...","...b..."],pal:{t:"#2f6b3a",m:"#3f8a4a",b:"#6b4a2b"}},
+  flor:{rows:["p.p",".y.","p.p"],pal:{p:"#f7a8c0",y:"#f2c14e"}},
+  pedra:{rows:[".ggg.","ggggg"],pal:{g:"#8b8f9a"}}
+};
+const MONSTROS=[["Slime","#6fcf6a"],["Gosma Roxa","#a77be0"],["Bolha de Lava","#f08a4b"]];
+function spr(ctx,s,x,y,o={}){
+  const rows=s.rows, pal=o.pal||s.pal, h=rows.length, w=Math.max(...rows.map(r=>r.length));
+  const x0=Math.round(x-w/2), y0=Math.round(y-h); ctx.globalAlpha=o.alpha??1;
+  for(let j=0;j<h;j++)for(let i=0;i<rows[j].length;i++){const c=pal[rows[j][i]];if(!c)continue;ctx.fillStyle=c;ctx.fillRect(o.flip?x0+w-1-i:x0+i,y0+j,1,1)}
+  ctx.globalAlpha=1;
+}
+function worldModel(P,c){
+  const start=c.ini.peso, lost=Math.max(0,start-c.last.peso), hasGoal=!!P.meta&&P.meta<start;
+  const N=hasGoal?Math.max(1,Math.ceil(start-P.meta-1e-9)):15, pos=Math.min(N,Math.floor(lost+1e-9));
+  const W=6, path=[];
+  for(let i=0;path.length<N+1;i++){
+    const row=i*2, xs=[...Array(W).keys()]; if(i%2)xs.reverse();
+    for(const x of xs){if(path.length<N+1)path.push([x,row])}
+    if(path.length<N+1)path.push([xs[W-1],row+1]);
+  }
+  const bosses=[]; let k=0;
+  for(let t=Math.floor(start/5)*5;;t-=5){
+    if(t>=start)continue;
+    const idx=Math.ceil(start-t-1e-9);
+    if(idx>=N||(hasGoal&&t<=P.meta))break;
+    if(idx<1)continue;
+    const [nome,cor]=MONSTROS[k++%MONSTROS.length]; bosses.push({idx,kg:t,nome:`${nome} dos ${t} kg`,cor,derrotado:c.last.peso<=t});
+  }
+  if(hasGoal)bosses.push({idx:N,kg:P.meta,nome:`Dragão dos ${Number.isInteger(P.meta)?P.meta:n1(P.meta)} kg`,final:true,derrotado:c.last.peso<=P.meta});
+  const ocup=new Set(bosses.map(b=>b.idx)), chests=[];
+  [.25,.5,.75].forEach(f=>{let i=Math.max(1,Math.round(N*f));while(ocup.has(i)&&i<N-1)i++;ocup.add(i);chests.push({idx:i,aberto:pos>=i})});
+  return {start,lost,hasGoal,N,pos,path,bosses,chests};
+}
+function missoes(P){
+  const mes=HOJE.slice(0,7), doMes=P.registros.filter(r=>r.data.startsWith(mes)), antes=P.registros.filter(r=>r.data<mes+"-01");
+  const sem=doMes.filter(r=>r.tipo==="semanal").length;
+  const ref=antes.length?antes[antes.length-1].peso:P.registros[0].peso, ult=doMes.length?doMes[doMes.length-1].peso:ref;
+  return [
+    {t:"Registrar a atualização mensal",ok:doMes.some(r=>r.tipo==="mensal"),x:50},
+    {t:`Fazer 2 pesagens rápidas (${Math.min(sem,2)}/2)`,ok:sem>=2,x:50},
+    {t:"Perder pelo menos 0,5 kg no mês",ok:ref-ult>=.5,x:50},
+    {t:"Contar pra Plotka como foi (escrever uma observação)",ok:doMes.some(r=>r.obs),x:50}
+  ];
+}
+const MOSTRAR_TODAS=false; // true = mostra todas as cartas abertas (só para conferir as ilustrações)
+function abrirCarta(i){
+  const P=people[state.p], c=calc(P), x=cartas(P,c,worldModel(P,c))[i];
+  let v=document.getElementById("cardView");
+  if(!v){v=document.createElement("div");v.id="cardView";v.className="card-view";document.body.appendChild(v);
+    v.addEventListener("click",e=>{if(e.target===v||e.target.closest("[data-cv-close]"))fecharCarta()})}
+  v.innerHTML=`<figure role="dialog" aria-modal="true" aria-label="Carta ${i+1}: ${x.n}"><img src="cartas/${i+1}.jpg" alt="Ilustração da carta ${x.n}">
+    <figcaption><div class="pix">${i+1}/9 · ${x.o}</div><h3>${x.n}</h3><p class="vt">${x.d}</p></figcaption>
+    <button type="button" class="cv-x" data-cv-close aria-label="Fechar">×</button></figure>`;
+  v.hidden=false;requestAnimationFrame(()=>v.classList.add("show"));
+}
+function fecharCarta(){const v=document.getElementById("cardView");if(v){v.classList.remove("show");v.hidden=true}}
+function cartas(P,c,wm){
+  const mens=P.registros.filter(r=>r.tipo==="mensal").length, [c1,c2,c3]=wm.chests.map(x=>x.aberto);
+  return [
+    {n:"Primeiro passo",d:"Perdeu o primeiro quilo.",g:"◆",o:"Conquista",ok:wm.lost>=1},
+    {n:"Um quarto",d:"Abriu o baú de 25% do caminho.",g:"✦",o:"Baú do mapa",ok:c1},
+    {n:"Cinco na conta",d:"Perdeu 5 kg.",g:"★",o:"Conquista",ok:wm.lost>=5},
+    {n:"Meio caminho",d:"Abriu o baú da metade.",g:"✦",o:"Baú do mapa",ok:c2},
+    {n:"Fita métrica",d:"20 cm a menos somando as medidas.",g:"◎",o:"Conquista",ok:c.cm>=20},
+    {n:"Constância",d:"3 atualizações mensais depois da ficha.",g:"▲",o:"Conquista",ok:mens>=4},
+    {n:"Reta final",d:"Abriu o baú de 75% do caminho.",g:"✦",o:"Baú do mapa",ok:c3},
+    {n:"Parceira Plotka",d:"10 pesagens registradas. A Plotka abanou o rabo.",g:"♥",o:"Conquista",ok:P.registros.length>=10},
+    {n:"Lenda",d:"Derrotou o dragão e chegou na meta.",g:"♛",o:"Chefe final",ok:wm.hasGoal&&c.last.peso<=P.meta}
+  ];
+}
+function xpInfo(wm,ms){
+  const xp=Math.round(wm.lost*100)+ms.filter(m=>m.ok).length*50+wm.chests.filter(x=>x.aberto).length*40+wm.bosses.filter(b=>b.derrotado).length*80;
+  return {xp,lvl:Math.floor(xp/250)+1,into:xp%250};
+}
+function game(P,c){
+  const wm=worldModel(P,c), ms=missoes(P), cs=cartas(P,c,wm), xi=xpInfo(wm,ms);
+  const prox=wm.bosses.find(b=>!b.derrotado);
+  const linha=prox?`Próximo chefe: <b style="color:var(--accent);font-weight:400">${prox.nome}</b>. Faltam ${n1(Math.max(0,c.last.peso-prox.kg))} kg para derrotá-lo.`
+    :wm.hasGoal?"Todos os chefes derrotados. Lenda!":`${P.nome} ainda não tem meta, então o mapa é provisório e o chefe final está escondido. Defina uma meta para revelar o dragão.`;
+  return `<section class="hero"><div class="eyebrow">Modo aventura</div><h1>A jornada de ${P.nome}</h1>
+      <p class="sub">Cada quilo perdido é uma casa no mapa. Derrote os chefes, abra os baús e colecione as cartas. A Plotka vai junto, claro.</p></section>
+    <section class="game-card">
+      <div class="hud">
+        <div><div class="pix lvl">${P.nome.toUpperCase()} · NÍVEL ${xi.lvl}</div>
+          <div class="xp" role="progressbar" aria-valuenow="${xi.into}" aria-valuemax="250" aria-label="Experiência"><span style="width:${xi.into/250*100}%"></span></div>
+          <div class="vt muted">${xi.into}/250 XP para o nível ${xi.lvl+1} · total ${xi.xp} XP</div></div>
+        <div class="vt hud-r">Casa <b>${wm.pos}</b> de ${wm.N}<br><span class="muted">Prazo: ${diasPrazo()} dias</span></div>
+      </div>
+      <canvas class="world" id="world" role="img" aria-label="Mapa 8-bit: ${P.nome} na casa ${wm.pos} de ${wm.N}, com a Plotka ao lado"></canvas>
+      <p class="vt quest-line">${linha}</p>
+    </section>
+    <div class="game-grid">
+      <section class="game-card"><h2 class="pix">Missões de ${MESL[dt(HOJE).getMonth()]}</h2>
+        <ul class="qlist vt">${ms.map(m=>`<li class="${m.ok?"ok":""}"><span class="box">${m.ok?"✓":""}</span><span class="t">${m.t}</span><span class="x">+${m.x} XP</span></li>`).join("")}</ul></section>
+      <section class="game-card"><h2 class="pix">Chefes do caminho</h2>
+        <ul class="qlist blist vt">${wm.bosses.map(b=>`<li class="${b.derrotado?"ok":""}"><span class="box">${b.derrotado?"✓":"!"}</span><span class="t">${b.nome}</span><span class="x">${b.derrotado?"derrotado":"casa "+b.idx}</span></li>`).join("")||'<li><span class="box">?</span><span class="t">Nenhum chefe à vista ainda</span><span></span></li>'}
+        ${!wm.hasGoal?'<li><span class="box">?</span><span class="t">Chefe final escondido</span><span class="x">defina a meta</span></li>':""}</ul></section>
+    </div>
+    <section class="game-card"><h2 class="pix">Coleção de cartas · ${cs.filter(x=>x.ok).length}/${cs.length}</h2>
+      ${MOSTRAR_TODAS?'<p class="vt muted preview-note">Prévia: todas as cartas estão abertas para você ver as ilustrações. Toque numa carta para ampliar.</p>':""}
+    </section>
+      <div class="tcards">${cs.map((x,i)=>{const on=MOSTRAR_TODAS||x.ok;return `<button type="button" class="tcard ${on?"on":"off"}" ${on?`data-card="${i}"`:"disabled"} style="--dl:${(i*.08).toFixed(2)}s" aria-label="${on?"Carta "+(i+1)+", "+x.n+": "+x.d:"Carta ainda bloqueada"}"><div class="in">
+        <div class="f art" style="background-image:url(cartas/${i+1}.jpg)"><div class="num pix">${i+1}/9</div><div class="cap"><div class="n">${x.n}</div><div class="d">${x.d}</div></div></div>
+        <div class="b"><span>?</span></div></div></button>`}).join("")}</div>`;
+}
+let worldRaf=0;
+function startWorld(){
+  cancelAnimationFrame(worldRaf);
+  const cv=document.getElementById("world"); if(!cv)return;
+  const P=people[state.p], c=calc(P), wm=worldModel(P,c), ctx=cv.getContext("2d");
+  const maxX=Math.max(...wm.path.map(p=>p[0])), maxY=Math.max(...wm.path.map(p=>p[1]));
+  const ox=(maxY+2)*8+12, oy=34, Wd=ox+(maxX+2)*8+12, Hd=oy+(maxX+maxY+2)*4+22;
+  cv.width=Wd; cv.height=Hd;
+  const iso=(gx,gy)=>[ox+(gx-gy)*8, oy+(gx+gy)*4];
+  const onPath=new Map(wm.path.map((p,i)=>[p[0]+","+p[1],i]));
+  const hash=(a,b)=>((a*73856093)^(b*19349663))>>>0;
+  const WIDTHS=[2,6,10,14,14,10,6,2];
+  const diamond=(sx,sy,col)=>{ctx.fillStyle=col;for(let d=0;d<8;d++){const w=WIDTHS[d];ctx.fillRect(sx-w/2,sy+d,w,1)}};
+  const tile=(gx,gy,top,side)=>{const [sx,sy]=iso(gx,gy);diamond(sx,sy+3,side);diamond(sx,sy+2,side);diamond(sx,sy+1,side);diamond(sx,sy,top)};
+  const tiles=[]; for(let gy=-1;gy<=maxY+1;gy++)for(let gx=-1;gx<=maxX+1;gx++)tiles.push([gx,gy]);
+  tiles.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1]));
+  const stars=[...Array(26)].map((_,i)=>[hash(i,7)%Wd,hash(i,3)%28]);
+  const calmo=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const acc=state.p==="doug"?"#b5cdb4":"#f7c6d3";
+  const frame=t=>{
+    ctx.fillStyle="#0e0f1a";ctx.fillRect(0,0,Wd,Hd);
+    ctx.fillStyle="#3a3c5c";stars.forEach(([x,y],i)=>{if(calmo||((t/600+i)%5)>.6)ctx.fillRect(x,y,1,1)});
+    const ents=[];
+    tiles.forEach(([gx,gy])=>{
+      const i=onPath.get(gx+","+gy);
+      if(i!=null){const passed=i<=wm.pos; const top=i===0?"#d9c9a3":i===wm.N?"#f2c14e":passed?"#e6cf9c":"#b8a582";
+        tile(gx,gy,top,passed?"#9c8458":"#7f6c4c");
+        if(passed&&i>0){const [sx,sy]=iso(gx,gy);ctx.fillStyle=acc;ctx.fillRect(sx-1,sy+3,3,1)}}
+      else{const h=hash(gx+5,gy+9);tile(gx,gy,(gx+gy)%2?"#5aa357":"#62ad5f","#3b7439");
+        const r=h%11; if(r===0||r===5)ents.push({gx,gy,d:"arvore"}); else if(r===2)ents.push({gx,gy,d:"flor"}); else if(r===7)ents.push({gx,gy,d:"pedra"})}
+    });
+    wm.chests.forEach(ch=>{const [gx,gy]=wm.path[ch.idx];ents.push({gx,gy,d:ch.aberto?"bauAberto":"bau"})});
+    wm.bosses.forEach(b=>{const [gx,gy]=wm.path[b.idx];ents.push({gx,gy,boss:b})});
+    const [pgx,pgy]=wm.path[wm.pos]; ents.push({gx:pgx,gy:pgy,player:true,z:.2});
+    const di=wm.pos>0?wm.pos-1:Math.min(1,wm.N); const [dgx,dgy]=wm.path[di]; ents.push({gx:dgx,gy:dgy,dog:true,z:.1});
+    ents.sort((a,b)=>(a.gx+a.gy+(a.z||0))-(b.gx+b.gy+(b.z||0)));
+    const prox=wm.bosses.find(b=>!b.derrotado);
+    ents.forEach(e=>{
+      const [sx,sy]=iso(e.gx,e.gy), fy=sy+5;
+      if(e.d)spr(ctx,SPR[e.d],sx,fy);
+      else if(e.boss){const b=e.boss, bob=calmo?0:Math.round(Math.sin(t/300+e.gx)*1);
+        if(b.final)spr(ctx,SPR.dragao,sx,fy+bob,{alpha:b.derrotado?.35:1});
+        else spr(ctx,SPR.slime,sx,fy+bob,{pal:{m:b.derrotado?"#55555f":b.cor,w:"#fff",k:b.derrotado?"#2b2b33":"#1a1a1a"},alpha:b.derrotado?.5:1});
+        if(b.derrotado){ctx.fillStyle="#f2c14e";ctx.fillRect(sx-1,fy-12,3,1);ctx.fillRect(sx,fy-13,1,3)}
+        else if(b===prox&&(calmo||Math.floor(t/400)%2)){ctx.fillStyle="#f2c14e";ctx.fillRect(sx,fy-15,1,3);ctx.fillRect(sx,fy-11,1,1)}}
+      else if(e.player){const bob=calmo?0:Math.floor(t/500)%2; spr(ctx,SPR[state.p],sx,fy-bob)}
+      else if(e.dog){const run=calmo?0:Math.sin(t/260), hop=calmo?0:Math.round(Math.abs(Math.sin(t/120))*3);
+        spr(ctx,SPR.plotka,sx+Math.round(run*4),fy+1-hop,{flip:Math.cos(t/260)<0})}
+    });
+    if(!calmo)worldRaf=requestAnimationFrame(frame);
+  };
+  worldRaf=requestAnimationFrame(frame);
+}
+
+/* ---------- telas ---------- */
+function painel(P,c){
+  const lost=c.ini.peso-c.last.peso;
+  const [il,ic]=imcLabel(c.imc), [rl,rc]=rcqLabel(c.rcq,P.sexo);
+  let goal;
+  const top=`<div class="hero-top" style="align-items:center"><div><div class="eyebrow">Olá,</div><h1 style="margin:0">${P.nome}</h1>
+      <p class="fun">${FRASES[state.p][fraseIdx[state.p]%FRASES[state.p].length]}</p>
+      <div class="prazo">Prazo de vocês: <b class="num">${diasPrazo()} dias</b> · ${fDate(PRAZO)}</div></div><button class="btn ghost" data-rep="open">Exportar relatório</button></div>`;
+  if(P.meta){
+    const pct=c.ini.peso>P.meta?Math.max(0,Math.min(100,(c.ini.peso-c.last.peso)/(c.ini.peso-P.meta)*100)):100;
+    goal=`<section class="card goal-hero">
+      <div class="eyebrow"><span>Meta de peso · ${n1(P.meta)} kg</span><span class="chip good num"><span><span data-count="${Math.round(pct)}" data-dec="0">${Math.round(pct)}</span>% do caminho</span></span></div>
+      <div class="duo num">
+        <div><div class="k">Peso atual · ${fDate(c.last.data)}</div><div class="goal-big"><span data-count="${c.last.peso}">${n1(c.last.peso)}</span><small>kg</small></div></div>
+        <div><div class="k">Faltam para a meta</div><div class="goal-big"><span class="acc" data-count="${Math.max(0,c.last.peso-P.meta)}">${n1(Math.max(0,c.last.peso-P.meta))}</span><small>kg</small></div></div>
+      </div>
+      <div class="track" role="progressbar" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><span data-w="${pct}" style="width:${pct}%"></span></div>
+      <div class="goal-row num"><span>Início <strong>${n1(c.ini.peso)} kg</strong></span><span>Meta <strong>${n1(P.meta)} kg</strong></span></div>
+      <div class="goal-stats num">
+        <div><div class="k">Já perdeu</div><div class="v"><span data-count="${lost}">${n1(lost)}</span> kg</div></div>
+        <div><div class="k">Ritmo médio</div><div class="v">${n1(-c.slopeMes)} kg/mês</div></div>
+        <div><div class="k">Previsão</div><div class="v">${c.prev?MESL[c.prev.getMonth()]+" "+c.prev.getFullYear():"—"}</div></div>
+      </div></section>`;
+  } else {
+    goal=`<section class="card goal-hero">
+      <div class="eyebrow"><span>Meta de peso</span><span class="chip neutral">Em aberto</span></div>
+      <div class="duo num" style="grid-template-columns:1fr"><div><div class="k">Peso atual · ${fDate(c.last.data)}</div><div class="goal-big"><span data-count="${c.last.peso}">${n1(c.last.peso)}</span><small>kg</small></div></div></div>
+      <p class="sub" style="margin:10px 0 18px">Já perdeu ${n1(lost)} kg desde ${MESL[dt(c.ini.data).getMonth()]}. Quando ${P.nome} definir uma meta, aparecem aqui a barra de progresso e a previsão de quando vai chegar lá.</p>
+      <button class="btn" data-act="meta">Definir meta</button></section>`;
+  }
+  const mens=P.registros.filter(r=>r.tipo==="mensal");
+  return `${top}
+    ${goal}
+    ${figCard(P)}
+    <div class="stats">
+      <section class="card stat"><div class="eyebrow">IMC</div><div class="v num">${n1(c.imc)}</div><span class="chip ${ic}">${il}</span><p>Calculado com ${String(P.altura).replace(".",",")} m de altura.</p></section>
+      <section class="card stat"><div class="eyebrow">Cintura ÷ quadril</div><div class="v num">${n2(c.rcq)}</div><span class="chip ${rc}">${rl}</span><p>${n1(c.lastM.medidas.cintura)} cm ÷ ${n1(c.lastM.medidas.quadril)} cm. Recomendado: abaixo de ${P.sexo==="F"?"0,85":"0,90"}.</p></section>
+      <section class="card stat"><div class="eyebrow">Centímetros a menos</div><div class="v num">${n1(c.cm)}</div><span class="chip good">Somando as ${MED.length} medidas</span><p>Comparado com a ficha técnica.</p></section>
+    </div>
+    <section class="card">
+      <div class="card-head"><h2>Evolução do peso</h2><span class="sub" style="margin:0">desde a ficha técnica · ${MES[dt(c.ini.data).getMonth()]} ${dt(c.ini.data).getFullYear()} – ${MES[dt(c.last.data).getMonth()]} ${dt(c.last.data).getFullYear()}</span></div>
+      ${chart(P.registros.map(r=>({data:r.data,v:r.peso,tipo:r.tipo})),{goal:P.meta,id:"peso"})}
+      <div class="legend"><span><i style="background:var(--accent)"></i>Pesagem mensal</span><span><i style="border:1.5px solid var(--accent)"></i>Pesagem semanal</span>${P.meta?'<span><i style="background:var(--good)"></i>Meta</span>':""}</div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Evolução das medidas</h2><span class="sub num" style="margin:0">desde a ficha técnica · ${MED.find(m=>m[0]===state.med)[1]}: ${n1(mens[0].medidas[state.med])} → ${n1(mens[mens.length-1].medidas[state.med])} cm</span></div>
+      <div class="pills" role="group" aria-label="Escolher medida">${MED.map(([k,l])=>`<button id="m-${k}" data-m="${k}" aria-pressed="${k===state.med}">${l}</button>`).join("")}</div>
+      ${chart(mens.map(r=>({data:r.data,v:r.medidas[state.med],tipo:"mensal"})),{unit:"cm",id:"med"})}
+    </section>`;
+}
+
+function ficha(P,c){
+  const card=P.cardapio;
+  return `<section class="hero"><div class="eyebrow">Ponto de partida</div><h1>Ficha técnica</h1><p class="sub">Tudo aqui serve de base para as comparações do site. Dá para editar quando quiserem.</p></section>
+    <section class="card">
+      <div class="card-head"><h2>Dados</h2><button class="link" data-act="ficha">Editar</button></div>
+      <div class="list num">
+        <div class="row"><span class="l">Altura</span><span class="r">${String(P.altura).replace(".",",")} m</span></div>
+        <div class="row"><span class="l">Meta de peso</span><span class="r">${P.meta?n1(P.meta)+" kg":'<button class="link" data-act="meta">Definir meta</button>'}</span></div>
+        <div class="row"><span class="l">Data de início</span><span class="r">${fDate(c.ini.data)}</span></div>
+        <div class="row"><span class="l">Peso inicial</span><span class="r">${n1(c.ini.peso)} kg</span></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Medidas iniciais</h2><button class="link" data-act="ficha">Editar</button></div>
+      <div class="measures num">${MED.map(([k,l])=>`<div><div class="k">${l}</div><div class="v">${n1(c.ini.medidas[k])}</div></div>`).join("")}</div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Fotos do início</h2><span class="sub" style="margin:0">${fDate(c.ini.data)}</span></div>
+      <div class="photos">${photo("Frente",P.ficha.fotosSrc?.[0])}${photo("Lado",P.ficha.fotosSrc?.[1])}</div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Cardápio</h2><div style="display:flex;gap:12px;align-items:center"><button class="link" data-act="cardapio">${card.length?"Editar":"Adicionar"}</button></div></div>
+      ${P.cardapioEditado&&card.length?`<p class="sub" style="margin:-6px 0 16px">Atualizado em ${fDate(P.cardapioEditado)}.</p>`:""}
+      <div class="menu">${card.length?card.map(([r,t])=>`<div class="meal"><b>${esc(r)}</b><span style="white-space:pre-line">${esc(t)}</span></div>`).join(""):'<p class="sub" style="margin:0">Nenhuma refeição ainda. Toque em Adicionar para montar o cardápio.</p>'}</div>
+    </section>`;
+}
+
+function hist(P){
+  const r=[...P.registros].reverse();
+  return `<section class="hero"><div class="eyebrow">Histórico</div><h1>Atualizações</h1><p class="sub">A atualização mensal é a principal. A pesagem rápida é opcional, para quem quiser se pesar no meio do mês.</p></section>
+    <div class="actions"><button class="btn" data-act="mensal">Atualização mensal</button><button class="btn ghost" data-act="semanal">Pesagem rápida</button><button class="btn ghost" data-rep="open">Exportar relatório</button></div>
+    ${r.map((e,i)=>{
+      const prev=r[i+1]; const d=prev?e.peso-prev.peso:null;
+      const nf=(e.fotosSrc||[]).length;
+      const meta=e.tipo==="mensal"?`${MED.length} medidas · ${nf?nf+(nf>1?" fotos":" foto"):"sem fotos"}`:"Só peso";
+      return `<section class="card entry-card"><div class="entry num">
+        <div class="date">${fDate(e.data)}</div>
+        <div class="meta">${meta}<span class="tag ${e.tipo==="mensal"?"m":"s"}">${e.tipo==="mensal"?"Mensal":"Semanal"}</span></div>
+        <div><div class="w">${n1(e.peso)} kg</div>${d!=null?`<div class="d" style="color:${d<=0?"var(--good)":"var(--warn)"}">${d<=0?"↓":"↑"} ${n1(Math.abs(d))}</div>`:'<div class="d" style="color:var(--muted)">início</div>'}</div>
+        ${e.obs?`<p class="obs">${esc(e.obs)}</p>`:""}
+        ${e.fotosSrc&&e.fotosSrc.length?`<div class="thumbs">${e.fotosSrc.map((s,j)=>`<img src="${s}" alt="Foto ${j+1} de ${fDate(e.data)}">`).join("")}</div>`:""}
+        <div class="entry-actions">${e===P.ficha
+          ?`<span class="sub" style="margin:0">Ficha técnica</span><button class="link" data-act="ficha">Editar ficha</button>`
+          :`<button class="link" data-edit="${P.todos.indexOf(e)}">Editar</button><button class="link danger" data-del="${P.todos.indexOf(e)}">Excluir</button>`}</div>
+      </div></section>`}).join("")}`;
+}
+
+function ba(P,c){
+  const lost=c.ini.peso-c.last.peso;
+  return `<section class="hero"><div class="eyebrow">Comparação</div><h1>Antes x agora</h1><p class="sub">Ficha técnica de ${fDate(c.ini.data)} comparada com a última atualização mensal.</p></section>
+    <section class="card">
+      <div class="photos">
+        <div>${photo("Antes",P.ficha.fotosSrc?.[0])}<p class="ba-label">${fMonth(dt(c.ini.data))}</p></div>
+        <div>${photo("Agora",ultimaFoto(P)?.fotosSrc[0])}<p class="ba-label">${fMonth(dt((ultimaFoto(P)||c.lastM).data))}</p></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Diferenças</h2><span class="chip good num">${menos(lost," kg")} · ${menos(c.cm," cm")}</span></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Medida</th><th>Antes</th><th>Agora</th><th>Diferença</th></tr></thead>
+        <tbody>
+          <tr><td>Peso</td><td>${n1(c.ini.peso)} kg</td><td>${n1(c.last.peso)} kg</td><td class="good">${menos(lost," kg")}</td></tr>
+          ${MED.map(([k,l])=>{const a=c.ini.medidas[k],b=c.lastM.medidas[k];return `<tr><td>${l}</td><td>${n1(a)}</td><td>${n1(b)}</td><td class="good">${menos(a-b," cm")}</td></tr>`}).join("")}
+        </tbody></table></div>
+    </section>`;
+}
+
+function vazio(P){
+  const msg={painel:"Assim que a ficha técnica estiver preenchida, aqui aparecem a meta, a silhueta, os gráficos e a evolução.",
+    ficha:"A ficha técnica é o ponto de partida: altura, meta, primeira pesagem, medidas e fotos do início. Tudo no site é comparado com ela.",
+    hist:"As atualizações mensais e as pesagens rápidas começam a aparecer aqui depois da ficha técnica.",
+    ba:"A comparação de antes e agora começa depois da ficha técnica.",
+    jogo:"O mapa da aventura abre quando a ficha técnica estiver pronta. A Plotka já está esperando na largada."}[state.t];
+  return `<section class="hero"><div class="eyebrow">${P.sexo==="F"?"Bem-vinda":"Bem-vindo"},</div><h1>${P.nome}</h1></section>
+    <section class="card empty"><div class="ic" aria-hidden="true">✦</div><h2>Vamos começar?</h2>
+      <p class="sub">${msg}</p><button class="btn" data-act="ficha">Preencher ficha técnica</button></section>`;
+}
+function render(){
+  const P=people[state.p], c=P.ficha?calc(P):null;
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===state.p));
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===state.t));
+  const m=document.getElementById("main");
+  document.body.dataset.person=state.p;
+  cancelAnimationFrame(worldRaf);
+  m.innerHTML=!c?vazio(P):state.t==="painel"?painel(P,c):state.t==="ficha"?ficha(P,c):state.t==="hist"?hist(P):state.t==="jogo"?game(P,c):ba(P,c);
+  if(!c){shrinkOnScroll();return}
+  animate();
+  if(state.t==="jogo")startWorld();
+  shrinkOnScroll();
+}
+/* caixas encolhem e somem conforme sobem para baixo do topo fixo */
+function absTop(el){let y=0;while(el){y+=el.offsetTop;el=el.offsetParent}return y}
+function shrinkOnScroll(){
+  if(calm)return;
+  const head=document.querySelector("header"), hb=head?head.getBoundingClientRect().bottom:0;
+  document.querySelectorAll("main > section, main > .stats > .card, main > .game-grid > section, main > .tcards > .tcard, main > .actions").forEach(el=>{
+    el.classList.add("shrink");
+    const top=absTop(el)-window.scrollY, h=el.offsetHeight||1;
+    const p=Math.max(0,Math.min(1,(hb-top)/(h*.85)));
+    el.style.transform=p>0?`scale(${(1-.22*p).toFixed(3)})`:"";
+    el.style.opacity=p>0?(1-p).toFixed(3):"";
+  });
+}
+let shrinkTick=false;
+addEventListener("scroll",()=>{if(!shrinkTick){shrinkTick=true;requestAnimationFrame(()=>{shrinkTick=false;shrinkOnScroll()})}},{passive:true});
+addEventListener("resize",()=>shrinkOnScroll());
+/* movimentos sutis: números contam até o valor e a barra da meta se enche */
+const calm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function animate(){
+  if(calm)return;
+  document.querySelectorAll("[data-count]").forEach(el=>{
+    const end=+el.dataset.count, dec=el.dataset.dec==="0", t0=performance.now(), dur=900;
+    const step=t=>{const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3), v=end*e;
+      el.textContent=dec?Math.round(v):n1(v); if(k<1)requestAnimationFrame(step)};
+    requestAnimationFrame(step);
+  });
+  document.querySelectorAll("[data-w]").forEach(el=>{el.style.transition="none";el.style.width="0%";
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.transition="width 1.1s cubic-bezier(.2,.7,.2,1)";el.style.width=el.dataset.w+"%"}))});
+}
+
+/* ---------- relatório ---------- */
+const repOpts={fotos:true,cardapio:true,obs:true};
+function miniFig(P,m,fill){
+  const g=bodyGeom(P,m),h=g.head;
+  return `<svg class="fig" viewBox="-40 0 80 186" aria-hidden="true"><ellipse cx="0" cy="182.6" rx="17" ry="1.6" fill="var(--fill)"/>
+    <g transform="translate(0 ${180-g.H})" fill="${fill}">${PARTS.map(k=>`<path d="${g.d[k]}"/>`).join("")}
+    <ellipse cx="0" cy="${h.cy}" rx="${h.rx}" ry="${h.ry}"/>${P.sexo==="F"?`<circle cx="0" cy="${h.cy-h.ry-1.4}" r="3.6"/>`:""}</g></svg>`;
+}
+function paper(P,c){
+  const mens=P.registros.filter(r=>r.tipo==="mensal"), lost=c.ini.peso-c.last.peso;
+  const [il]=imcLabel(c.imc);
+  const kv=(k,v)=>`<div><div class="k">${k}</div><div class="v num">${v}</div></div>`;
+  const head=`<tr><th>Medida</th>${mens.map(r=>`<th>${MES[dt(r.data).getMonth()]}</th>`).join("")}<th>Diferença</th></tr>`;
+  const rowP=`<tr><td>Peso (kg)</td>${mens.map(r=>`<td>${n1(r.peso)}</td>`).join("")}<td class="good">${menos(mens[0].peso-mens[mens.length-1].peso)}</td></tr>`;
+  const rows=MED.map(([k,l])=>{const a=mens[0].medidas[k],b=mens[mens.length-1].medidas[k];
+    return `<tr><td>${l} (cm)</td>${mens.map(r=>`<td>${n1(r.medidas[k])}</td>`).join("")}<td class="good">${menos(a-b)}</td></tr>`}).join("");
+  return `
+    <header class="p-head">
+      <div><div class="eyebrow">Relatório de acompanhamento</div><h1>${P.nome}</h1></div>
+      <div class="meta num">Período: ${fDate(c.ini.data)} a ${fDate(c.last.data)}<br>Gerado em ${fDate(HOJE)}</div>
+    </header>
+    <section>
+      <h2>Resumo</h2>
+      <div class="p-grid">
+        ${kv("Peso inicial",n1(c.ini.peso)+" kg")}${kv("Peso atual",n1(c.last.peso)+" kg")}${kv("Variação",menos(lost," kg"))}${kv("Meta",P.meta?n1(P.meta)+" kg":"Em aberto")}
+        ${kv("Altura",String(P.altura).replace(".",",")+" m")}${kv("IMC",n1(c.imc)+" · "+il)}${kv("Cintura ÷ quadril",n2(c.rcq))}${kv("Centímetros a menos",n1(c.cm)+" cm")}
+      </div>
+    </section>
+    <section><h2>Evolução do peso</h2>${chart(P.registros.map(r=>({data:r.data,v:r.peso,tipo:r.tipo})),{goal:P.meta,id:"rep"})}
+      <div class="legend"><span><i style="background:var(--accent)"></i>Pesagem mensal</span><span><i style="border:1.5px solid var(--accent)"></i>Pesagem semanal</span></div></section>
+    <section><h2>Medidas mês a mês</h2><div class="table-wrap"><table><thead>${head}</thead><tbody>${rowP}${rows}</tbody></table></div></section>
+    <section><h2>Silhueta</h2><div class="p-figs">
+      <div>${miniFig(P,mens[0].medidas,"var(--ghost)")}Início · ${MES[dt(mens[0].data).getMonth()]}</div>
+      <div>${miniFig(P,mens[mens.length-1].medidas,"var(--accent)")}Agora · ${MES[dt(mens[mens.length-1].data).getMonth()]}</div></div></section>
+    ${repOpts.fotos?`<section><h2>Fotos</h2><div class="photos" style="max-width:420px">${photo("Início",P.ficha.fotosSrc?.[0])}${photo("Agora",ultimaFoto(P)?.fotosSrc[0])}</div></section>`:""}
+    ${repOpts.cardapio?`<section><h2>Cardápio atual</h2><div class="menu">${P.cardapio.map(([r,t])=>`<div class="meal"><b>${esc(r)}</b><span style="white-space:pre-line">${esc(t)}</span></div>`).join("")}</div></section>`:""}
+    ${repOpts.obs?`<section><h2>Observações</h2><div class="p-obs">${P.registros.filter(r=>r.obs).map(r=>`<div><b class="num">${fDate(r.data)}</b><span>${esc(r.obs)}</span></div>`).join("")}</div></section>`:""}
+    <footer class="p-foot">Missão Casamento · relatório gerado a partir dos registros de ${P.nome}</footer>`;
+}
+function openReport(){
+  const P=people[state.p], c=calc(P);
+  const opt=(k,l)=>`<label><input type="checkbox" id="opt-${k}" data-opt="${k}"${repOpts[k]?" checked":""}>${l}</label>`;
+  document.getElementById("repRoot").innerHTML=`<div class="rep-ov" id="repOv" role="dialog" aria-label="Relatório de ${P.nome}">
+    <div class="rep-bar">
+      <button class="link" data-rep="close">← Voltar</button>
+      <div class="rep-opts">${opt("fotos","Fotos")}${opt("cardapio","Cardápio")}${opt("obs","Observações")}</div>
+      <div class="actions"><button class="btn ghost" data-rep="copy">Copiar resumo</button><button class="btn" data-rep="pdf">Salvar em PDF</button></div>
+    </div>
+    <article class="paper" id="paper">${paper(P,c)}</article></div>`;
+  document.body.style.overflow="hidden";
+}
+function closeReport(){document.getElementById("repRoot").innerHTML="";document.body.style.overflow=""}
+function resumoTexto(){
+  const P=people[state.p], c=calc(P), mens=P.registros.filter(r=>r.tipo==="mensal"), a=mens[0], b=mens[mens.length-1];
+  let t=`Relatório de acompanhamento – ${P.nome}\nPeríodo: ${fDate(c.ini.data)} a ${fDate(c.last.data)}\n\n`;
+  t+=`Peso: ${n1(c.ini.peso)} kg → ${n1(c.last.peso)} kg (${menos(c.ini.peso-c.last.peso," kg")})\n`;
+  t+=`Meta: ${P.meta?n1(P.meta)+" kg":"em aberto"}\nAltura: ${String(P.altura).replace(".",",")} m · IMC: ${n1(c.imc)} · Cintura/quadril: ${n2(c.rcq)}\n\nMedidas (início → agora):\n`;
+  MED.forEach(([k,l])=>{t+=`${l}: ${n1(a.medidas[k])} → ${n1(b.medidas[k])} cm (${menos(a.medidas[k]-b.medidas[k])})\n`});
+  return t;
+}
+async function copiarResumo(){
+  const t=resumoTexto();
+  try{await navigator.clipboard.writeText(t);toast("Resumo copiado. É só colar no WhatsApp ou no e-mail.")}
+  catch(e){const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Resumo copiado")}catch(_){toast("Não deu para copiar neste aparelho")}ta.remove()}
+}
+
+/* ---------- formulários ---------- */
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2400)}
+function closeSheet(){document.getElementById("sheetRoot").innerHTML=""}
+let mealN=0;
+function mealRow(r,t){const i=mealN++;return `<div class="meal-row">
+  <div class="field" style="margin-bottom:8px"><label for="mn-${i}">Refeição</label><input id="mn-${i}" value="${esc(r)}" placeholder="Ex.: Café da manhã"></div>
+  <div class="field" style="margin-bottom:6px"><label for="mt-${i}">O que comer</label><textarea id="mt-${i}" placeholder="Ex.: 2 ovos mexidos, 1 fatia de pão integral, café sem açúcar">${esc(t)}</textarea></div>
+  <button type="button" class="link danger rm-meal" style="font-size:13px;margin-bottom:16px">Remover refeição</button></div>`}
+function openDelete(idx){
+  const P=people[state.p], r=P.todos[idx]; if(!r)return;
+  document.getElementById("sheetRoot").innerHTML=`<div class="overlay" id="ov"><div class="sheet" role="alertdialog" aria-labelledby="delT">
+    <div class="sheet-head"><h2 id="delT">Excluir atualização?</h2></div>
+    <p class="sub" style="margin:0 0 6px">${r.tipo==="mensal"?"Atualização mensal":"Pesagem rápida"} de <b style="color:var(--fg)">${fDate(r.data)}</b> · ${n1(r.peso)} kg${r.tipo==="mensal"?", medidas":""}${r.fotos?" e fotos":""}.</p>
+    <p class="sub" style="margin:0 0 18px">Depois de excluir não dá para desfazer. Gráficos, silhueta e comparações se ajustam sozinhos.</p>
+    <div class="sheet-actions"><button class="btn ghost" id="cancel">Cancelar</button><button class="btn danger" id="delOk">Excluir</button></div></div></div>`;
+  document.getElementById("cancel").onclick=closeSheet;
+  document.getElementById("ov").onclick=e=>{if(e.target.id==="ov")closeSheet()};
+  document.getElementById("delOk").onclick=()=>{P.todos.splice(idx,1);salvar();state.fig=null;closeSheet();render();toast("Atualização excluída")};
+  document.getElementById("cancel").focus();
+}
+function openSheet(kind,editIdx){
+  const P=people[state.p]; const today=HOJE;
+  const ed=editIdx!=null?P.todos[editIdx]:null; if(ed)kind=ed.tipo;
+  let body="";
+  if(kind==="meta"){
+    body=`<div class="field"><label for="f-meta">Meta de peso (kg)</label><input id="f-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex.: 78" required></div>`;
+  } else if(kind==="cardapio"){
+    body=`<p class="sub" style="margin:-8px 0 16px">Escreva cada refeição e o que comer nela. Pode usar várias linhas.</p>
+      <div id="meals">${P.cardapio.map(([r,t])=>mealRow(r,t)).join("")}</div>
+      <button type="button" class="btn ghost" id="addMeal" style="width:100%;margin:4px 0 14px">+ Adicionar refeição</button>`;
+  } else if(kind==="ficha"){
+    const ini=P.ficha||{data:today,peso:"",medidas:{},obs:""};
+    body=`<p class="sub" style="margin:-8px 0 16px">A evolução, os gráficos e as comparações contam a partir da data de início, com esta primeira pesagem.</p>`+`<div class="grid3" style="grid-template-columns:repeat(2,1fr)">
+        <div class="field"><label for="f-altura">Altura (m)</label><input id="f-altura" type="number" step="0.01" inputmode="decimal" value="${P.altura??""}" required></div>
+        <div class="field"><label for="f-meta">Meta de peso (kg)</label><input id="f-meta" type="number" step="0.1" inputmode="decimal" value="${P.meta??""}" placeholder="Em aberto"></div>
+        <div class="field"><label for="f-data">Data de início</label><input id="f-data" type="date" value="${ini.data}" required></div>
+        <div class="field"><label for="f-peso">Peso inicial (kg)</label><input id="f-peso" type="number" step="0.1" inputmode="decimal" value="${ini.peso}" required></div>
+      </div>
+      <h3>Medidas iniciais (cm)</h3><div class="grid3">${MED.map(([k,l])=>`<div class="field"><label for="f-${k}">${l}</label><input id="f-${k}" type="number" step="0.1" inputmode="decimal" value="${ini.medidas[k]??""}" required></div>`).join("")}</div>
+      <h3>Fotos do início</h3><div class="field"><label for="f-fotos">Frente, lado e costas${P.ficha?" (deixe vazio para manter as atuais)":""}</label><input id="f-fotos" type="file" accept="image/*" multiple></div>
+      <div class="field"><label for="f-obs">Observação do início</label><textarea id="f-obs" placeholder="Como você está se sentindo no começo? Objetivos, motivação…">${esc(ini.obs||"")}</textarea></div>`;
+  } else {
+    body=`<div class="field"><label for="f-data">Data</label><input id="f-data" type="date" value="${ed?ed.data:today}" required></div>
+      <div class="field"><label for="f-peso">Peso (kg)</label><input id="f-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex.: 65,2" value="${ed?ed.peso:""}" required></div>`;
+    if(kind==="mensal"){
+      const lastM=P.registros.filter(r=>r.tipo==="mensal").pop().medidas;
+      const temFotos=ed&&ed.fotosSrc&&ed.fotosSrc.length;
+      body+=`<h3>Medidas (cm)</h3><div class="grid3">${MED.map(([k,l])=>`<div class="field"><label for="f-${k}">${l}</label><input id="f-${k}" type="number" step="0.5" inputmode="decimal" placeholder="${n1(lastM[k])}" value="${ed&&ed.medidas?ed.medidas[k]:""}"></div>`).join("")}</div>
+        <h3>Fotos</h3>
+        ${temFotos?`<div class="thumbs" style="margin:0 0 10px">${ed.fotosSrc.map(s=>`<img src="${s}" alt="Foto atual">`).join("")}</div>
+          <label class="sub" style="display:flex;gap:8px;align-items:center;margin:0 0 12px"><input type="checkbox" id="f-rmfotos" style="accent-color:var(--accent)"> Remover estas fotos</label>`:""}
+        <div class="field"><label for="f-fotos">${ed?"Trocar por novas fotos (deixe vazio para manter)":"Frente, lado e costas"}</label><input id="f-fotos" type="file" accept="image/*" multiple></div>`;
+    }
+    body+=`<div class="field"><label for="f-obs">Observações</label><textarea id="f-obs" placeholder="Como foi o mês? Treinos, sono, como se sentiu…">${ed?esc(ed.obs||""):""}</textarea></div>`;
+  }
+  const title=kind==="meta"?"Definir meta de "+P.nome:kind==="cardapio"?"Cardápio de "+P.nome:kind==="ficha"?(P.ficha?"Editar ficha técnica":"Ficha técnica de "+P.nome):ed?(kind==="mensal"?"Editar atualização mensal":"Editar pesagem rápida"):kind==="mensal"?"Atualização mensal":"Pesagem rápida";
+  document.getElementById("sheetRoot").innerHTML=`<div class="overlay" id="ov"><form class="sheet" id="sheetForm">
+    <div class="sheet-head"><h2>${title}</h2><button type="button" class="link" id="cancel">Cancelar</button></div>
+    ${body}<button class="btn" type="submit" style="width:100%;margin-top:6px">Salvar</button></form></div>`;
+  document.getElementById("cancel").onclick=closeSheet;
+  document.getElementById("ov").onclick=e=>{if(e.target.id==="ov")closeSheet()};
+  if(kind==="cardapio"){
+    const box=document.getElementById("meals");
+    document.getElementById("addMeal").onclick=()=>{box.insertAdjacentHTML("beforeend",mealRow("",""));box.lastElementChild.querySelector("input").focus()};
+    box.onclick=e=>{const b=e.target.closest(".rm-meal");if(b)b.closest(".meal-row").remove()};
+  }
+  document.getElementById("sheetForm").onsubmit=async e=>{
+    e.preventDefault();
+    const lerFotos=async()=>{const inp=document.getElementById("f-fotos");if(!inp)return [];
+      return Promise.all([...inp.files].map(f=>reduzirFoto(f))).then(a=>a.filter(Boolean))};
+    const num=id=>{const v=parseFloat(String(document.getElementById(id).value).replace(",","."));return isNaN(v)?null:v};
+    if(kind==="meta"){const v=num("f-meta");if(!v)return;P.meta=v;salvar();closeSheet();render();toast("Meta salva");return}
+    if(kind==="cardapio"){
+      P.cardapio=[...document.querySelectorAll("#meals .meal-row")].map(r=>[r.querySelector("input").value.trim(),r.querySelector("textarea").value.trim()]).filter(([a,b])=>a||b).map(([a,b])=>[a||"Refeição",b]);
+      P.cardapioEditado=HOJE;salvar();closeSheet();render();toast("Cardápio salvo");return}
+    if(kind==="ficha"){
+      const novo=!P.ficha, ini=P.ficha||{tipo:"mensal",ficha:true,medidas:{}}, alt=num("f-altura"), pe=num("f-peso"), da=document.getElementById("f-data").value;
+      if(!alt||!pe||!da)return;
+      P.altura=alt; P.meta=num("f-meta"); ini.peso=pe; ini.data=da;
+      MED.forEach(([k])=>{const v=num("f-"+k);if(v)ini.medidas[k]=v});
+      const fs=await lerFotos(); if(fs.length){ini.fotosSrc=fs;ini.fotos=fs.length}
+      ini.obs=document.getElementById("f-obs").value.trim();
+      if(novo)P.todos.push(ini);
+      P.todos.sort((a,b)=>a.data.localeCompare(b.data));
+      salvar();closeSheet();render();toast(novo?"Ficha técnica criada. Boa jornada!":"Ficha técnica atualizada");return}
+    const peso=num("f-peso"), data=document.getElementById("f-data").value; if(!peso||!data)return;
+    const rec=ed||{tipo:kind};
+    rec.data=data; rec.peso=peso; rec.obs=document.getElementById("f-obs").value.trim();
+    if(kind==="mensal"){
+      const base=ed&&ed.medidas?ed.medidas:P.registros.filter(r=>r.tipo==="mensal").pop().medidas, m={};
+      MED.forEach(([k])=>m[k]=num("f-"+k)??base[k]); rec.medidas=m;
+      const novas=await lerFotos(), rm=document.getElementById("f-rmfotos")?.checked;
+      if(novas.length){rec.fotosSrc=novas}else if(rm||!ed){rec.fotosSrc=ed?[]:novas}
+      rec.fotos=(rec.fotosSrc||[]).length;
+    }
+    if(!ed)P.todos.push(rec);
+    P.todos.sort((a,b)=>a.data.localeCompare(b.data));
+    salvar();state.fig=null;closeSheet();state.t="hist";render();toast(ed?"Alterações salvas":"Registro salvo");
+  };
+  setTimeout(()=>{const f=document.querySelector("#sheetForm input");f&&f.focus()},50);
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  if(b.dataset.rep){const r=b.dataset.rep;
+    if(r==="open"){stopPlay();openReport()}
+    else if(r==="close")closeReport();
+    else if(r==="copy")copiarResumo();
+    else if(r==="pdf"){try{window.print()}catch(_){toast("Não deu para abrir a impressão neste aparelho")}}
+    return}
+  if(b.dataset.card!=null){abrirCarta(+b.dataset.card);return}
+  if(b.dataset.edit!=null){openSheet(null,+b.dataset.edit);return}
+  if(b.dataset.del!=null){openDelete(+b.dataset.del);return}
+  if(b.dataset.fig==="play"){playFig();return}
+  if(b.dataset.fig==="ghost"){state.ghost=!state.ghost;document.getElementById("ghost").hidden=!state.ghost;b.setAttribute("aria-pressed",state.ghost);return}
+  if(b.dataset.p||b.dataset.t){stopPlay();state.fig=null}
+  if(b.dataset.p){state.p=b.dataset.p;render();window.scrollTo(0,0)}
+  else if(b.dataset.t){state.t=b.dataset.t;render();window.scrollTo(0,0)}
+  else if(b.dataset.m){state.med=b.dataset.m;render()}
+  else if(b.dataset.act){openSheet(b.dataset.act)}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeSheet();closeReport();fecharCarta()}});
+document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.opt;if(k){repOpts[k]=e.target.checked;const P=people[state.p];document.getElementById("paper").innerHTML=paper(P,calc(P))}});
+document.addEventListener("input",e=>{if(e.target.id==="figRange"){stopPlay();state.fig=+e.target.value;updateFigure()}});
+render();
+</script>
+</body>
+</html>
