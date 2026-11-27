@@ -341,6 +341,7 @@ button.tcard.on:hover .f.art,button.tcard.on:focus-visible .f.art{box-shadow:ins
 
 .lock{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;place-items:center;
   padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+.lock[hidden]{display:none}
 .lock-box{width:100%;max-width:340px;text-align:center;display:grid;gap:14px}
 .lock-box .ic{width:56px;height:56px;margin:0 auto;border-radius:16px;background:var(--fg);color:var(--bg);display:grid;place-items:center}
 .lock-box h1{font-size:30px}
@@ -371,6 +372,17 @@ button.tcard.on:hover .f.art,button.tcard.on:focus-visible .f.art{box-shadow:ins
 </style>
 </head>
 <body data-person="anna">
+
+<div class="lock" id="lock" hidden>
+  <form class="lock-box" id="lockForm">
+    <div class="ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+    <h1>Missão Casamento</h1>
+    <p class="sub" style="margin:0">Digite a senha de vocês para entrar.</p>
+    <input id="senha" type="password" placeholder="Senha" aria-label="Senha" autocomplete="current-password" required>
+    <button class="btn" type="submit" id="lockBtn">Entrar</button>
+    <p class="hint" id="lockMsg" role="status">Vocês digitam uma vez em cada aparelho e ele lembra.</p>
+  </form>
+</div>
 
 <div class="glow" aria-hidden="true"></div>
 <header>
@@ -404,20 +416,76 @@ function pessoa(nome,sexo,altura,meta){
     get registros(){const f=this.ficha;return f?[f,...this.todos.filter(r=>r!==f&&r.data>f.data)]:[]}};
 }
 const people={anna:pessoa("Anna","F",1.65,60),doug:pessoa("Doug","M",1.75,null)};
-function carregar(){
+
+/* ---------- guardar online (Firebase): dados em "pessoas", cada foto em "fotos" ---------- */
+const fotoCache={};
+let pronto=false;
+const prontoDe={anna:false,doug:false};
+function serial(P){
+  return JSON.parse(JSON.stringify({altura:P.altura,meta:P.meta??null,cardapioEditado:P.cardapioEditado??null,
+    cardapio:P.cardapio.map(([r,t])=>({r,t})),
+    todos:P.todos.map(({fotosSrc,...x})=>x)}));
+}
+function salvar(id=state.p){
+  if(!window.fb)return false;
+  fb.salvarPessoa(id,serial(people[id])).catch(()=>toast("Não deu para salvar. Confira a internet e tente de novo."));
+  return true;
+}
+function guardarFotos(srcs){
+  return srcs.map(s=>{const id=fb.novoId();fotoCache[id]=s;fb.salvarFoto(id,s).catch(()=>toast("Uma foto não foi salva. Confira a internet."));return id});
+}
+function apagarFotos(ids){(ids||[]).forEach(id=>{delete fotoCache[id];fb.apagarFoto(id).catch(()=>{})})}
+function ligarFotos(P){P.todos.forEach(r=>{r.fotosSrc=(r.fotoIds||[]).map(i=>fotoCache[i]).filter(Boolean)})}
+async function buscarFotos(P){
+  const falta=[...new Set(P.todos.flatMap(r=>r.fotoIds||[]).filter(i=>!(i in fotoCache)))];
+  if(!falta.length)return;
+  await Promise.all(falta.map(async i=>{try{fotoCache[i]=await fb.lerFoto(i)}catch(e){fotoCache[i]=null}}));
+  ligarFotos(P); if(pronto)render();
+}
+function aplicar(id,d){
+  const P=people[id];
+  if(d){
+    if(d.altura!=null)P.altura=d.altura;
+    P.meta=d.meta??null; P.cardapioEditado=d.cardapioEditado??null;
+    P.cardapio=(d.cardapio||[]).map(x=>[x.r||"",x.t||""]);
+    P.todos=(d.todos||[]).slice().sort((a,b)=>a.data.localeCompare(b.data));
+  } else if(!importarLocal(id)) return;
+  ligarFotos(P); buscarFotos(P);
+}
+/* quem já tinha usado a versão sem senha: leva o que estava salvo neste aparelho para o online */
+function importarLocal(id){
   try{
-    const s=JSON.parse(localStorage.getItem(CHAVE)||"null"); if(!s)return;
-    ["anna","doug"].forEach(id=>{const d=s[id];if(!d)return;const P=people[id];
-      ["altura","meta","todos","cardapio","cardapioEditado"].forEach(k=>{if(d[k]!==undefined)P[k]=d[k]})});
-  }catch(e){}
+    const s=JSON.parse(localStorage.getItem(CHAVE)||"null"), d=s&&s[id]; if(!d||!d.todos||!d.todos.length)return false;
+    const P=people[id];
+    ["altura","meta","cardapio","cardapioEditado"].forEach(k=>{if(d[k]!==undefined)P[k]=d[k]});
+    P.todos=d.todos.map(r=>{const x={...r};if(r.fotosSrc&&r.fotosSrc.length)x.fotoIds=guardarFotos(r.fotosSrc);delete x.fotosSrc;return x});
+    salvar(id); delete s[id]; localStorage.setItem(CHAVE,JSON.stringify(s));
+    return true;
+  }catch(e){return false}
 }
-function salvar(){
-  const s={};
-  ["anna","doug"].forEach(id=>{const P=people[id];s[id]={altura:P.altura,meta:P.meta,todos:P.todos,cardapio:P.cardapio,cardapioEditado:P.cardapioEditado}});
-  try{localStorage.setItem(CHAVE,JSON.stringify(s));return true}
-  catch(e){toast(e&&e.name==="QuotaExceededError"?"Não coube no aparelho. Tente com menos fotos.":"Este navegador não deixou guardar os dados.");return false}
-}
-carregar();
+let ouvintes=[];
+window.aoMudarLogin=u=>{
+  ouvintes.forEach(f=>f()); ouvintes=[]; pronto=false; prontoDe.anna=prontoDe.doug=false;
+  const lock=document.getElementById("lock");
+  if(!u){lock.hidden=false;document.getElementById("main").innerHTML="";setTimeout(()=>document.getElementById("senha").focus(),50);return}
+  lock.hidden=true;
+  document.getElementById("main").innerHTML='<section class="card empty"><p class="sub" style="margin:0">Carregando…</p></section>';
+  ["anna","doug"].forEach(id=>ouvintes.push(fb.ouvir(id,d=>{
+    aplicar(id,d); prontoDe[id]=true;
+    if(prontoDe.anna&&prontoDe.doug){const primeira=!pronto;pronto=true;
+      if(primeira||!document.querySelector("#sheetRoot .overlay"))render()}
+  },()=>toast("Não deu para carregar os dados. Confira a internet."))));
+};
+document.getElementById("lockForm").onsubmit=async e=>{
+  e.preventDefault();
+  const msg=document.getElementById("lockMsg"), btn=document.getElementById("lockBtn"), s=document.getElementById("senha").value;
+  if(!window.fb){msg.textContent="Sem conexão com a internet. Tente de novo em instantes.";return}
+  btn.disabled=true; msg.textContent="Entrando…";
+  try{await fb.entrar(s);document.getElementById("senha").value=""}
+  catch(err){const c=err&&err.code||"";
+    msg.textContent=c.includes("network")?"Sem conexão com a internet. Tente de novo.":c.includes("too-many")?"Muitas tentativas. Espere um pouquinho e tente de novo.":"Senha incorreta. Tente de novo.";}
+  btn.disabled=false;
+};
 /* fotos ficam menores antes de guardar, para caber no aparelho */
 function reduzirFoto(file,max=900){
   return new Promise(res=>{const r=new FileReader();
@@ -832,7 +900,8 @@ function ficha(P,c){
       <div class="card-head"><h2>Cardápio</h2><div style="display:flex;gap:12px;align-items:center"><button class="link" data-act="cardapio">${card.length?"Editar":"Adicionar"}</button></div></div>
       ${P.cardapioEditado&&card.length?`<p class="sub" style="margin:-6px 0 16px">Atualizado em ${fDate(P.cardapioEditado)}.</p>`:""}
       <div class="menu">${card.length?card.map(([r,t])=>`<div class="meal"><b>${esc(r)}</b><span style="white-space:pre-line">${esc(t)}</span></div>`).join(""):'<p class="sub" style="margin:0">Nenhuma refeição ainda. Toque em Adicionar para montar o cardápio.</p>'}</div>
-    </section>`;
+    </section>
+    <div class="actions" style="justify-content:center"><button class="link" data-sair>Sair deste aparelho</button></div>`;
 }
 
 function hist(P){
@@ -1011,7 +1080,7 @@ function openDelete(idx){
     <div class="sheet-actions"><button class="btn ghost" id="cancel">Cancelar</button><button class="btn danger" id="delOk">Excluir</button></div></div></div>`;
   document.getElementById("cancel").onclick=closeSheet;
   document.getElementById("ov").onclick=e=>{if(e.target.id==="ov")closeSheet()};
-  document.getElementById("delOk").onclick=()=>{P.todos.splice(idx,1);salvar();state.fig=null;closeSheet();render();toast("Atualização excluída")};
+  document.getElementById("delOk").onclick=()=>{apagarFotos(r.fotoIds);P.todos.splice(idx,1);salvar();state.fig=null;closeSheet();render();toast("Atualização excluída")};
   document.getElementById("cancel").focus();
 }
 function openSheet(kind,editIdx){
@@ -1074,7 +1143,7 @@ function openSheet(kind,editIdx){
       if(!alt||!pe||!da)return;
       P.altura=alt; P.meta=num("f-meta"); ini.peso=pe; ini.data=da;
       MED.forEach(([k])=>{const v=num("f-"+k);if(v)ini.medidas[k]=v});
-      const fs=await lerFotos(); if(fs.length){ini.fotosSrc=fs;ini.fotos=fs.length}
+      const fs=await lerFotos(); if(fs.length){apagarFotos(ini.fotoIds);ini.fotoIds=guardarFotos(fs);ini.fotosSrc=fs;ini.fotos=fs.length}
       ini.obs=document.getElementById("f-obs").value.trim();
       if(novo)P.todos.push(ini);
       P.todos.sort((a,b)=>a.data.localeCompare(b.data));
@@ -1086,7 +1155,8 @@ function openSheet(kind,editIdx){
       const base=ed&&ed.medidas?ed.medidas:P.registros.filter(r=>r.tipo==="mensal").pop().medidas, m={};
       MED.forEach(([k])=>m[k]=num("f-"+k)??base[k]); rec.medidas=m;
       const novas=await lerFotos(), rm=document.getElementById("f-rmfotos")?.checked;
-      if(novas.length){rec.fotosSrc=novas}else if(rm||!ed){rec.fotosSrc=ed?[]:novas}
+      if(novas.length||rm){apagarFotos(rec.fotoIds);rec.fotoIds=guardarFotos(novas);rec.fotosSrc=novas}
+      else if(!ed){rec.fotoIds=[];rec.fotosSrc=[]}
       rec.fotos=(rec.fotosSrc||[]).length;
     }
     if(!ed)P.todos.push(rec);
@@ -1118,7 +1188,39 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeSheet();closeReport();fecharCarta()}});
 document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.opt;if(k){repOpts[k]=e.target.checked;const P=people[state.p];document.getElementById("paper").innerHTML=paper(P,calc(P))}});
 document.addEventListener("input",e=>{if(e.target.id==="figRange"){stopPlay();state.fig=+e.target.value;updateFigure()}});
-render();
+document.addEventListener("click",e=>{if(e.target.closest("[data-sair]")&&window.fb)fb.sair()});
+document.getElementById("main").innerHTML='<section class="card empty"><p class="sub" style="margin:0">Carregando…</p></section>';
+setTimeout(()=>{if(!window.fb){document.getElementById("lock").hidden=false;document.getElementById("lockMsg").textContent="Sem conexão com a internet. Confira e recarregue a página."}},8000);
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,collection,setDoc,getDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+// endereço público do projeto no Firebase (não é segredo: quem protege os dados são a senha e as regras)
+const app=initializeApp({
+  apiKey:"AIzaSyAnrTfEQ0Dxs-UPnbnvQ43Bmi_WQnczKW0",
+  authDomain:"missaocasamento-6f2c6.firebaseapp.com",
+  projectId:"missaocasamento-6f2c6",
+  storageBucket:"missaocasamento-6f2c6.firebasestorage.app",
+  messagingSenderId:"793452281988",
+  appId:"1:793452281988:web:6bdc42dd6d3101625482d1"
+});
+const EMAIL="casal@missaocasamento-6f2c6.firebaseapp.com";
+const auth=getAuth(app);
+let db;
+try{db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}
+catch(e){db=initializeFirestore(app,{})}
+window.fb={
+  entrar:s=>signInWithEmailAndPassword(auth,EMAIL,s),
+  sair:()=>signOut(auth),
+  salvarPessoa:(id,d)=>setDoc(doc(db,"pessoas",id),d),
+  salvarFoto:(id,src)=>setDoc(doc(db,"fotos",id),{src}),
+  lerFoto:async id=>{const s=await getDoc(doc(db,"fotos",id));return s.exists()?s.data().src:null},
+  apagarFoto:id=>deleteDoc(doc(db,"fotos",id)),
+  novoId:()=>doc(collection(db,"fotos")).id,
+  ouvir:(id,cb,erro)=>onSnapshot(doc(db,"pessoas",id),s=>cb(s.exists()?s.data():null),erro)
+};
+onAuthStateChanged(auth,u=>window.aoMudarLogin(u));
 </script>
 </body>
 </html>
